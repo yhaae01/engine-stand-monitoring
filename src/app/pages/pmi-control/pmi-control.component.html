@@ -1,0 +1,645 @@
+<div class="container px-6 pt-28 pb-6 mx-auto max-w-full">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <!-- Card Filter header -->
+    <div
+      class="block p-6 rounded-lg border-dashed border-2 border-sky-200 bg-white mb-5"
+    >
+      <form [formGroup]="searchForm" (ngSubmit)="searchData()" novalidate>
+        <!-- Row 1 -->
+        <div class="grid grid-cols-3 gap-4 mb-4">
+          <select
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            formControlName="aircraft_type_id"
+          >
+            <option disabled value="">--Aircraft Type--</option>
+            <option
+              *ngFor="let aircraftType of aircraftTypeData"
+              [ngValue]="aircraftType.aircraftTypeId"
+            >
+              {{ aircraftType.acType }}
+            </option>
+          </select>
+          <select
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            formControlName="type_id"
+          >
+            <option disabled value="">--Engine/APU Type--</option>
+            <option *ngFor="let type of typeData" [ngValue]="type.typeId">
+              {{ type.typeName }}
+            </option>
+          </select>
+          <select
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            formControlName="manufacture_id"
+          >
+            <option disabled value="">--Manufacture--</option>
+            <option
+              *ngFor="let manufacture of manufactureData"
+              [ngValue]="manufacture.manufactureId"
+            >
+              {{ manufacture.manufactureName }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="grid grid-cols-3 gap-4">
+          <select
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            formControlName="part_number"
+          >
+            <option disabled value="">--Part Number--</option>
+            <option
+              *ngFor="let part of partNumberData"
+              [ngValue]="part.partNumber"
+            >
+              {{ part.partNumber }}
+            </option>
+          </select>
+          <select
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            formControlName="serial_number"
+          >
+            <option disabled value="">--Serial Number--</option>
+            <option
+              *ngFor="let sn of serialNumberData"
+              [ngValue]="sn.serialNumber"
+            >
+              {{ sn.serialNumber }}
+            </option>
+          </select>
+          <div class="flex justify-start">
+            <button
+              (click)="resetData()"
+              type="button"
+              class="inline-block mr-3 px-6 py-1.5 border-2 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out w-full"
+            >
+              Reset
+            </button>
+            <button
+              type="submit"
+              class="p-6 inline-block px-6 py-1.5 bg-blue-600 text-white font-medium text-md leading-tight rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table-fixed border-collapse">
+        <thead class="border-b bg-blue-200">
+          <tr>
+            <!-- Column headers -->
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              No.
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['description'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('description')"
+              >
+                Description
+                <hero-icon
+                  *ngIf="orderRequest['description']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['m_type'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_type.type')"
+              >
+                Engine/APU Type
+                <hero-icon
+                  *ngIf="orderRequest['m_type']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['m_aircraft_type'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_aircraft_type.ac_type')"
+              >
+                Aircraft Type
+                <hero-icon
+                  *ngIf="orderRequest['m_aircraft_type']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['part_number'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('part_number')"
+              >
+                Part Number
+                <hero-icon
+                  *ngIf="orderRequest['part_number']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['serial_number'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('serial_number')"
+              >
+                Serial Number
+                <hero-icon
+                  *ngIf="orderRequest['serial_number']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['inventory_number']
+                  ? 'text-black'
+                  : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('inventory_number')"
+              >
+                INVT. No.
+                <hero-icon
+                  *ngIf="orderRequest['inventory_number']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['manufacture_date']
+                  ? 'text-black'
+                  : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('manufacture_date')"
+              >
+                Manufacture Date
+                <hero-icon
+                  *ngIf="orderRequest['manufacture_date']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['m_manufacture'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_manufacture.manufacture')"
+              >
+                Manufacture
+                <hero-icon
+                  *ngIf="orderRequest['m_manufacture']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Last PMI Date
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Due Date
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['pmi_data_one'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('pmi_data_one.next_pmi_due_date')"
+              >
+                Days to Go
+                <hero-icon
+                  *ngIf="orderRequest['pmi_data_one']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['updated_by'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('updated_by')"
+              >
+                Updated By
+                <hero-icon
+                  *ngIf="orderRequest['updated_by']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['m_owner'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_owner.owner_name')"
+              >
+                Owner
+                <hero-icon
+                  *ngIf="orderRequest['m_owner']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['activity_status'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('activity_status')"
+              >
+                Status
+                <hero-icon
+                  *ngIf="orderRequest['activity_status']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Action
+            </th>
+            <!-- Add additional column headers here -->
+          </tr>
+          <tr>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('description', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_type.type', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_aircraft_type.ac_type', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('part_number', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('serial_number', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('inventory_number', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="date"
+                (change)="filterDate($event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_manufacture.manufacture', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('updated_by', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_owner.owner_name', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <select
+                (change)="filterStatus($event)"
+                class="form-select form-select-sm rounded-md block w-28 px-2 py-1.5 text-sm font-normal text-gray-700 bg-gray-100 bg-clip-padding bg-no-repeat border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-600 focus:outline-none"
+                aria-label=".form-select-sm example"
+              >
+                <option hidden [selected]="onStatus == 0">Select</option>
+                <option *ngIf="onStatus != 0" value="0">Reset</option>
+                <option value="1">Incoming</option>
+                <option value="2">Outgoing</option>
+              </select>
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows and cells -->
+          <tr
+            class="text-center"
+            *ngFor="let pmiControls of pmiControlData; let i = index"
+          >
+            <td class="py-4 px-6 border border-gray-300">
+              {{ dataRequest.offset + 1 + i }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 uppercase">
+              {{ pmiControls.description }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.type.typeName }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.aircraftType.acType }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <a
+                href="{{ pmiControls.pmiSheet[0].pmiSheet }}"
+                target="_blank"
+                class="text-blue-600 hover:text-blue-700 transition underline duration-300 ease-in-out mb-4"
+                >{{ pmiControls.partNumber }}
+              </a>
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.serialNumber }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.inventoryNumber }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.manufactureDate | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.manufacture.manufactureName }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.pmiData?.pmiDate | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.pmiData?.nextPmiDueDate | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <span
+                *ngIf="pmiControls.days > 7"
+                class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline outline outline-2 outline-green-400 font-bold bg-green-300 text-green-800 rounded"
+                >{{ pmiControls.days }} Days to Go</span
+              >
+              <span
+                *ngIf="pmiControls.days < 7"
+                class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline outline outline-2 outline-red-400 font-bold bg-red-300 text-red-800 rounded"
+                >{{ pmiControls.days }} Days to Go</span
+              >
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.updatedBy }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ pmiControls.owner.ownerName }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <span
+                *ngIf="pmiControls.status == 1"
+                class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold outline outline-2 outline-green-400 bg-green-300 text-green-800 rounded"
+                >Incoming</span
+              >
+              <span
+                *ngIf="pmiControls.status == 2"
+                class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold outline outline-2 outline-red-400 bg-red-300 text-red-800 rounded"
+                >Outgoing</span
+              >
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <button
+                type="button"
+                (click)="insertData(pmiControls.equipmentId)"
+                class="border-lime-400 text-lime-400 font-medium text-md leading-tight outline outline-2 outline-gray-200 rounded hover:bg-gray-500 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </td>
+            <!-- Add additional cells here -->
+          </tr>
+          <!-- Add additional rows here -->
+
+          <!-- Jika datanya kosong -->
+          <tr *ngIf="pmiControlData?.length == 0">
+            <td
+              colspan="16"
+              class="py-5 items-center text-center text-gray-500 font-bold"
+            >
+              No data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Table Pagination -->
+    <div
+      *ngIf="pmiControlData?.length > 0"
+      class="flex items-center justify-between mt-5"
+    >
+      <div class="flex items-center justify-start">
+        <span class="text-sm">Show</span>
+        <select
+          [(ngModel)]="paginator.pageSize"
+          (ngModelChange)="changePageSize()"
+          class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full py-1.5 pl-2 pr-7 mx-2 hover:cursor-pointer"
+        >
+          <option *ngFor="let size of paginator.pageOption" [ngValue]="size">
+            {{ size }}
+          </option>
+        </select>
+        <span class="text-sm">data</span>
+      </div>
+      <div class="inline-flex items-center text-center text-sm">
+        Page {{ paginator.pageNumber }} of {{ paginator.totalPage }}
+      </div>
+      <div class="flex items-center text-sm">
+        <button
+          type="button"
+          (click)="changePageNumber(false)"
+          [disabled]="paginator.pageNumber == 1"
+          [class]="paginator.pageNumber == 1 ? 'bg-gray-200' : 'bg-gray-50'"
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg active:bg-gray-200 active:border-blue-300"
+        >
+          <hero-icon
+            [name]="'chevron-left'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-3 w-3 mr-1"
+          ></hero-icon>
+          Previous
+        </button>
+        <button
+          type="button"
+          (click)="changePageNumber(true)"
+          [disabled]="paginator.pageNumber == paginator.totalPage"
+          [class]="
+            paginator.pageNumber == paginator.totalPage
+              ? 'bg-gray-200'
+              : 'bg-gray-50'
+          "
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg active:bg-gray-200 active:border-blue-300 ml-2"
+        >
+          Next
+          <hero-icon
+            [name]="'chevron-right'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-3 w-3 ml-1"
+          ></hero-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

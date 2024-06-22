@@ -1,0 +1,71 @@
+<div class="flex flex-row duration-300" [ngClass]="this.getSidebarCurrentValue() === 'show' ? 'mr-80' : 'mr-16'">
+  <nav [ngClass]="this.getSidebarCurrentValue() !== 'show' ? 'shadow-right-dark' : ''" class="bg-dbx-neutral-100 w-16 fixed h-full flex flex-col items-center overflow-hidden z-10">
+    <div class=" flex flex-col space-y-1/2 py-4 justify-between items-center" style="height: 100vh;">
+      <div>
+        <div class="w-10 h-10 relative mb-4 mx-4">
+          <div class="group w-full h-full rounded-md overflow-hidden shadow-inner text-center bg-purple table cursor-pointer">
+            <img src="../../../assets/images/avatar.png" alt="lovely avatar" class="object-cover object-center w-full h-full visible" />
+          </div>
+        </div>
+        <a *ngFor="let route of sidebarRoute" [routerLink]="route.path">
+          <div (click)="this.toggleSidebar()" routerLinkActive="border-l-dbx-blue-600 p-8 w-8 h-8 border-l-8 bg-slate-100 text-dbx-blue-600" [tooltip]="route.name" class="nav-menu-btn group">
+            <hero-icon [name]="route.icon" hostDisplay="inlineBlock" type="solid" class="nav-btn-icon group-hover:text-dbx-blue-600"></hero-icon>
+          </div>
+        </a>
+      </div>
+      <div>
+        <a routerLink="/user">
+          <div (click)="this.toggleSidebar()" routerLinkActive="border-l-dbx-blue-600 p-8 w-8 h-8 border-l-8 bg-slate-100 text-dbx-blue-600" [tooltip]="'User'" class="nav-menu-btn group">
+            <div class="w-10 h-10 relative">
+              <div class="group w-full h-full rounded-full overflow-hidden shadow-inner text-center bg-purple table cursor-pointer">
+                <span class="hidden group-hover:table-cell text-dbx-neutral-700 font-bold align-middle">MD</span>
+                <img src="https://pickaface.net/gallery/avatar/unr_random_180410_1905_z1exb.png" alt="lovely avatar" class="object-cover object-center w-full h-full visible group-hover:hidden" />
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sub menu: wrapper -->
+  <div [ngClass]="this.getSidebarCurrentValue() === 'show' ? 'w-64 shadow-right-dark ml-16' : 'w-0'" class="w-64 bg-dbx-blue-700 bg-pattern-accent bg-top-4 h-full fixed duration-300 " [@showHide]="this.getSidebarCurrentValue()">
+    <div class="py-4 px-4 flex flex-row justify-between items-center bg-dbx-blue-700">
+      <span class="text-xl font-jakarta font-bold text-white"> {{ this.getSidebar().subMenuTitle$.getValue() | transformTitleCase }}</span>
+      <hero-icon name="arrow-sm-left" hostDisplay="inlineBlock" type="outline" (click)="this.getSidebar().hideSidebar()" class="w-5 h-5 text-white cursor-pointer hover:bg-dbx-neutral-500 hover:rounded-full"></hero-icon>
+    </div>
+
+    <!-- Sub menu: container -->
+    <div class=" mx-4 w-56 pb-20 fleex flex-col h-screen absolute scrollbar overflow-y-auto">
+      <ng-container *ngFor="let item of subMenu ">
+        <!-- <ng-container *ngFor="let _item of item"> -->
+        <!-- Sub menu: title -->
+        <div class="flex flex-row items-center space-x-1 mt-4">
+          <hero-icon [name]="item.groupIcon" hostDisplay="inlineBlock" type="outline" class="w-5 h-5 text-white"></hero-icon>
+          <span class="font-jakarta text-sm font-semibold text-white">{{item.groupName}}</span>
+        </div>
+
+        <ng-container *ngFor="let _itemdetails of item.details">
+          <!-- Sub menu: content -->
+          <div class="ml-6 mt-2 flex flex-col items-start space-y-2">
+            <div class="flex flex-row items-center space-x-1">
+              <a [routerLink]="_itemdetails.link" class="group">
+                <span 
+                  class="font-jakarta text-dbx-neutral-300 text-sm group-hover:ml-2 group-hover:font-semibold group-hover:text-dbx-blue-200 duration-200"
+                  [ngClass]="this.getSidebarCurrentValue() !== 'show' ? 'hidden' : 'show'"
+                >
+                  {{ _itemdetails.name | transformTitleCase}}
+                </span>
+              </a>
+            </div>
+          </div>
+          <!-- Sub menu: content -->
+        </ng-container>
+
+        <!-- </ng-container> -->
+      </ng-container>
+    </div>
+    <!-- Sub menu: container -->
+  </div>
+  <!-- Sub menu: wrapper -->
+</div>

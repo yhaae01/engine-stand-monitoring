@@ -1,0 +1,469 @@
+<div class="container px-6 pt-28 pb-6 mx-auto">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between mb-3">
+      <button
+        type="button"
+        routerLink="/inventory"
+        class="flex items-center px-5 py-2 border-2 mb-3 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
+      <h1 class="text-2xl font-bold" style="margin-left: -100px">
+        Detail Inventory
+      </h1>
+      <div></div>
+    </div>
+
+    <!-- Card biru -->
+    <div
+      class="block p-6 rounded-lg border-dashed border-2 border-sky-200 bg-white mb-5"
+    >
+      <div class="lg:hidden sm:block">
+        <div class="flex flex-wrap justify-center">
+          <img
+            [src]="imageData"
+            (error)="defaultPhoto($event)"
+            class="p-1 bg-white border rounded max-w-xs"
+            alt="No Image"
+          />
+        </div>
+      </div>
+      <div class="grid lg:grid-cols-3 lg:gap-4">
+        <div class="hidden sm:block">
+          <div class="flex flex-wrap justify-center">
+            <img
+              [src]="imageData"
+              (error)="defaultPhoto($event)"
+              class="p-1 bg-white border rounded max-w-xs mx-auto"
+              alt="No Image"
+            />
+          </div>
+        </div>
+        <div class="col-span-2">
+          <!-- Tabs -->
+          <ul
+            class="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-4"
+            id="tabs-tab"
+            role="tablist"
+          >
+            <!-- List Tabs -->
+            <li class="nav-item" role="presentation">
+              <a
+                href="#general-information"
+                class="nav-link block font-medium text-md leading-tight border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+                id="general-information-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#general-information"
+                role="tab"
+                aria-controls="general-information"
+                aria-selected="true"
+                >General Information</a
+              >
+            </li>
+            <li class="nav-item" role="presentation">
+              <a
+                href="#spesification-engine-apu-stand"
+                class="nav-link block font-medium text-md leading-tight border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent"
+                id="spesification-engine-apu-stand-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#spesification-engine-apu-stand"
+                role="tab"
+                aria-controls="spesification-engine-apu-stand"
+                aria-selected="false"
+                >Specification Engine/APU Stand</a
+              >
+            </li>
+          </ul>
+
+          <!-- Content Tabs -->
+          <div class="tab-content" id="tabs-tabContent">
+            <!-- General Information -->
+            <div
+              class="tab-pane fade show active"
+              id="general-information"
+              role="tabpanel"
+              aria-labelledby="general-information-tab"
+            >
+              <form>
+                <div class="grid lg:grid-cols-3 lg:gap-4">
+                  <!-- Row 1 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Storage Location</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.storageLocation }}"
+                      disabled
+                      class="form-control block text-center w-full px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Inventory Number</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.inventoryNumber }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Inventory Date</label>
+                    <input
+                      type="text"
+                      value="{{
+                        detailInventory?.inventoryDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 2 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Initial PMI Date</label>
+                    <input
+                      type="text"
+                      value="{{
+                        detailInventory?.pmiData[0].pmiDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Destination</label>
+                    <input
+                      value="{{
+                        detailInventory?.destination?.destinationName || '-'
+                      }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Reason Outgoing</label>
+                    <input
+                      value="{{ detailInventory?.reason || '-' }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 3 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Contract of Date</label>
+                    <input
+                      value="{{
+                        detailInventory?.contractDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Next PMI</label>
+                    <input
+                      type="text"
+                      value="{{
+                        detailInventory?.pmiData[0].nextPmiDueDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Limitation</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.limitation }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 4 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Notes</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.notes || '-' }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Status</label>
+                    <input
+                      type="text"
+                      value="{{
+                        detailInventory?.status === 1 ? 'Incoming' : 'Outgoing'
+                      }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Remark</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.remark || '-' }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- Specification Engine/APU Stand -->
+            <div
+              class="tab-pane fade"
+              id="spesification-engine-apu-stand"
+              role="tabpanel"
+              aria-labelledby="spesification-engine-apu-stand-tab"
+            >
+              <form>
+                <div class="grid lg:grid-cols-3 lg:gap-4">
+                  <!-- Row 1 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Model</label>
+                    <input
+                      value="{{ detailInventory?.model }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Aircraft Type</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.aircraftType.acType }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Engine/APU Type</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.type.typeName }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 2 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Manufacture</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.manufacture.manufactureName }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Part Number</label>
+                    <input
+                      value="{{ detailInventory?.partNumber }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Serial Number</label>
+                    <input
+                      value="{{ detailInventory?.serialNumber }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 3 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Date Manufacture</label>
+                    <input
+                      value="{{
+                        detailInventory?.manufactureDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Owner</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.owner.ownerName }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm"
+                      >Additional Accessory</label
+                    >
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.accessory }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 4 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Description</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.description || '-' }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Overall</label>
+                    <input
+                      type="text"
+                      value="{{ detailInventory?.overall || '0' }}%"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="table-auto border w-full">
+        <thead>
+          <tr
+            class="py-4 px-6 font-bold uppercase text-sm text-center border border-gray-400"
+            style="background-color: #bad5f9"
+          >
+            <!-- Column headers -->
+            <th scope="col" class="px-6 py-4 border-r">No.</th>
+            <th scope="col" class="px-6 py-4 border-r">Activity</th>
+            <th scope="col" class="px-6 py-4 border-r">Last Date</th>
+            <th scope="col" class="px-6 py-4 border-r">Next Date</th>
+            <th scope="col" class="px-6 py-4 border-r">ID Number</th>
+            <th scope="col" class="px-6 py-4 border-r">Result</th>
+            <!-- Add additional column headers here -->
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows and cells -->
+          <tr
+            class="text-center"
+            *ngFor="
+              let equipment of detailInventory?.logEquipment!;
+              let i = index
+            "
+          >
+            <td class="py-4 px-6 border border-gray-300">
+              {{ 1 + i }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ equipment.status == 1 ? "Incoming" : "Outgoing" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{
+                equipment.inventoryData?.pmiData[0].pmiDate
+                  | dfnsParseIso
+                  | dfnsFormat : "dd-LLL-yyyy"
+              }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{
+                equipment.inventoryData?.pmiData[0].nextPmiDueDate
+                  | dfnsParseIso
+                  | dfnsFormat : "dd-LLL-yyyy"
+              }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ equipment.updatedBy }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <span *ngIf="!equipment.link">-</span>
+              <a
+                *ngIf="equipment.link"
+                href="{{ equipment.link }}"
+                target="_blank"
+                class="text-blue-600 hover:text-blue-700 transition underline duration-300 ease-in-out mb-4"
+                >{{ equipment.link }}
+              </a>
+            </td>
+          </tr>
+          <!-- Add additional rows here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-center mt-6">
+      <button
+        (click)="editInventory(detailInventory?.equipmentId)"
+        type="button"
+        class="mb-2 w-1/4 inline-block px-6 py-2.5 bg-yellow-500 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-yellow-600 hover:shadow-lg focus:bg-yellow-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-yellow-800 active:shadow-lg transition duration-150 ease-in-out"
+      >
+        Edit
+      </button>
+      <button
+        type="button"
+        (click)="deleteInventory(detailInventory)"
+        class="mb-2 w-1/4 mx-3 inline-block px-6 py-2.5 bg-red-500 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-red-600 hover:shadow-lg focus:bg-red-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
+      >
+        Delete
+      </button>
+      <button
+        type="button"
+        (click)="incomingData(detailInventory)"
+        *ngIf="detailInventory?.status == 2"
+        class="mb-2 w-1/4 mr-3 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+      >
+        Incoming
+      </button>
+      <button
+        (click)="outgoingData(detailInventory.equipmentId)"
+        type="button"
+        *ngIf="detailInventory?.status == 1"
+        class="mb-2 w-1/4 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+      >
+        Outgoing
+      </button>
+    </div>
+  </div>
+</div>

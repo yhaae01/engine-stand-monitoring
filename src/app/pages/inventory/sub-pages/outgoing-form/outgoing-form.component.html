@@ -1,0 +1,323 @@
+<div class="container px-6 pt-28 pb-6 mx-auto">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between">
+      <button
+        (click)="resetForm()"
+        type="button"
+        routerLink="/inventory"
+        class="flex items-center px-5 py-2 border-2 mb-3 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
+      <h1 class="text-2xl font-bold" style="margin-left: -100px">
+        Outgoing Engine/APU Stand
+      </h1>
+      <div></div>
+    </div>
+
+    <form
+      [formGroup]="OutgoingInventoryForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+    >
+      <div class="flex justify-center">
+        <div class="my-5 w-96">
+          <div class="...">
+            <div class="flex flex-wrap justify-center">
+              <img
+                [src]="imageData"
+                (error)="defaultPhoto($event)"
+                class="p-1 bg-white border rounded max-w-xs"
+                alt="No Image"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Row 1 -->
+        <div class="form-group">
+          <label for="">Description </label>
+          <input
+            type="text"
+            value="{{ detailInventory?.description }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Engine/APU Type </label>
+          <input
+            type="text"
+            value="{{ detailInventory?.type.typeName }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 2 -->
+        <div class="form-group">
+          <label for="">Aircraft Type </label>
+          <input
+            type="text"
+            value="{{ detailInventory?.aircraftType.acType }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Part Number </label>
+          <input
+            type="text"
+            value="{{ detailInventory?.partNumber }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-group">
+          <label for="">Serial Number </label>
+          <input
+            type="text"
+            value="{{ detailInventory?.serialNumber }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Model</label>
+          <input
+            type="text"
+            value="{{ detailInventory?.model }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 4 -->
+        <div class="form-group">
+          <label for="">Owner </label>
+          <input
+            type="text"
+            value="{{ detailInventory?.owner.ownerName }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Storage Location</label>
+          <input
+            type="text"
+            disabled
+            value="{{ detailInventory?.storageLocation }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 5 -->
+        <div class="form-group">
+          <label for="">Limitation of Date</label>
+          <input
+            type="text"
+            value="{{ detailInventory?.limitation }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Contract Date</label>
+          <input
+            type="date"
+            disabled
+            value="{{ detailInventory?.contractDate }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 6 -->
+        <div class="form-group">
+          <label for="">Initial PMI Date</label>
+          <input
+            type="date"
+            disabled
+            value="{{ detailInventory?.pmiData[0].pmiDate }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Next PMI</label>
+          <input
+            type="date"
+            disabled
+            value="{{ detailInventory?.pmiData[0].nextPmiDueDate }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 7 -->
+        <div class="form-group">
+          <label for="">Manufacture </label>
+          <input
+            type="text"
+            value="{{ detailInventory?.manufacture.manufactureName }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Date Manufacture</label>
+          <input
+            type="date"
+            disabled
+            value="{{ detailInventory?.manufactureDate }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 8 -->
+        <div class="form-group">
+          <label for="">Inventory Number</label>
+          <input
+            type="text"
+            value="{{ detailInventory?.inventoryNumber }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Inventory Date</label>
+          <input
+            type="date"
+            disabled
+            value="{{ detailInventory?.inventoryDate }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 9 -->
+        <div class="form-group">
+          <label for="">Additional Accessory</label>
+          <input
+            type="text"
+            value="{{ detailInventory?.accessory }}"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Overall</label>
+          <input
+            type="text"
+            value="{{ detailInventory?.overall || '0' }}%"
+            disabled
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="">Destination <span class="text-red-500">*</span></label>
+          <select
+            id="destination_id"
+            name="destination_id"
+            formControlName="destination_id"
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          >
+            <option value="" selected>Select Destination</option>
+            <option
+              *ngFor="let destinations of destinationData"
+              value="{{ destinations.destinationId }}"
+            >
+              {{ destinations.destinationName }}
+            </option>
+          </select>
+          <div
+            *ngIf="
+              !destination_id?.valid &&
+              (destination_id?.dirty || destination_id?.touched)
+            "
+          >
+            <small
+              class="text-red-800"
+              [hidden]="!destination_id.errors.required"
+            >
+              Destination is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">Reason <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            formControlName="reason"
+            name="reason"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Notes</label>
+          <input
+            type="text"
+            formControlName="note"
+            name="note"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for=""
+            >External Link <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="link"
+            name="link"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="">Remark</label>
+          <input
+            type="text"
+            id="remark"
+            name="remark"
+            formControlName="remark"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <div class="flex justify-center mt-6">
+        <button
+          type="button"
+          (click)="resetForm()"
+          routerLink="/inventory"
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 border-2 mr-5 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+        >
+          Back
+        </button>
+        <button
+          type="submit"
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 bg-lime-600 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-lime-700 hover:shadow-lg focus:bg-lime-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-lime-800 active:shadow-lg transition duration-150 ease-in-out"
+        >
+          Confim
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

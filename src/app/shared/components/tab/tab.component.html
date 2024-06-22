@@ -1,0 +1,59 @@
+<ul class="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0" id="tabs-tab"
+  role="tablist">
+
+  <!-- TODO: Implement Tailwind Components -->
+  <li 
+    *ngFor="let tab of tabs"
+    class="nav-item" role="presentation"
+    (click)="selectTab(tab)"
+  >
+    <a href="javascript:void(0)" 
+      class="
+        nav-link
+        block
+        font-medium
+        text-xs
+        leading-tight
+        uppercase
+        border-x-0 border-t-0 border-b-2 border-transparent
+        px-6
+        py-3
+        my-2
+        hover:border-transparent hover:bg-gray-100
+        focus:border-transparent
+      " 
+      [ngClass]="tab.active ? 'active' : ''"
+      data-bs-toggle="pill" 
+      role="tab" 
+      aria-selected="true">{{ tab.title }}</a>
+  </li>
+
+  <li 
+    *ngFor="let tab of dynamicTabs"
+    class="nav-item" role="presentation"
+    (click)="selectTab(tab)"
+  >
+    <a href="javascript:void(0)" 
+      class="
+        nav-link
+        block
+        font-medium
+        text-xs
+        leading-tight
+        uppercase
+        border-x-0 border-t-0 border-b-2 border-transparent
+        px-6
+        py-3
+        my-2
+        hover:border-transparent hover:bg-gray-100
+        focus:border-transparent
+      " 
+      [ngClass]="tab.active ? 'active' : ''"
+      data-bs-toggle="pill" 
+      role="tab" 
+      aria-selected="true">{{ tab.title }}</a>
+  </li>
+</ul>
+<div class="tab-content">
+  <ng-content class="tab-pane fade show active"></ng-content>
+</div>

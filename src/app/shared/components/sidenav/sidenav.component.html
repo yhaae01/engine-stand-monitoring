@@ -1,0 +1,80 @@
+<div
+  [ngClass]="
+    this.isSidebarOpen ? 'show w-60' : 'hide collapse collapse-horizontal w-0'
+  "
+  class="h-screen sticky top-0 bg-inherit"
+  id="collapseSidebar"
+>
+  <!-- Logo -->
+  <div class="p-7">
+    <a routerLink="/home">
+      <img
+        src="../../../assets/images/engineStandLogo.png"
+        alt="Logo GMF"
+        class="object-cover object-center w-full h-full visible"
+      />
+    </a>
+  </div>
+
+  <!-- Sidebar Menu -->
+  <ul class="relative px-2" id="sidenavMenu">
+    <li
+      class="relative"
+      *ngFor="let route of sidenavRoute"
+      id="{{ route.selector }}"
+    >
+      <a
+        [class]="
+          route.children
+            ? isChildActive(route)
+              ? 'accordion-button'
+              : 'accordion-button collapsed'
+            : ''
+        "
+        [routerLink]="route.link"
+        routerLinkActive="bg-dbx-blue-500 text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center text-sm py-4 px-5 h-10 overflow-hidden text-ellipsis whitespace-nowrap rounded-lg hover:text-black hover:bg-dbx-blue-100 transition duration-500 ease-in-out cursor-pointer"
+        [attr.data-bs-toggle]="route.children ? 'collapse' : ''"
+        [attr.data-bs-target]="'#' + route.panelId"
+        [attr.aria-expanded]="route.children ? 'false' : ''"
+        [attr.aria-controls]="route.children ? route.panelId : ''"
+        [style.box-shadow]="'none'"
+      >
+        <hero-icon
+          [name]="route.icon"
+          hostDisplay="inlineBlock"
+          type="outline"
+          class="nav-btn-icon"
+        ></hero-icon>
+        <span class="ml-2">{{ route.name }}</span>
+      </a>
+      <ul
+        *ngIf="route.children"
+        [class.show]="isChildActive(route)"
+        class="relative accordion-collapse collapse"
+        [attr.id]="route.panelId"
+        [attr.aria-labelledby]="route.selector"
+        data-bs-parent="#sidenavMenu"
+      >
+        <li *ngFor="let subpage of route.children" class="relative">
+          <a
+            [routerLink]="subpage.link"
+            routerLinkActive="bg-dbx-blue-500 text-white"
+            class="flex items-center text-sm py-4 pl-12 pr-6 h-10 overflow-hidden text-ellipsis whitespace-nowrap rounded-lg hover:text-black hover:bg-dbx-blue-100 transition duration-500 ease-in-out cursor-pointer"
+            data-mdb-ripple="true"
+            data-mdb-ripple-color="primary"
+          >
+            <hero-icon
+              [name]="subpage.icon"
+              hostDisplay="inlineBlock"
+              type="outline"
+              class="nav-btn-icon"
+            ></hero-icon>
+            <span class="ml-2">{{ subpage.name }}</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

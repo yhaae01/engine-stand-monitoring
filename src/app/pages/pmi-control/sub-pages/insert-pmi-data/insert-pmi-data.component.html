@@ -1,0 +1,596 @@
+<div class="container px-6 pt-28 pb-6 mx-auto">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between mb-3">
+      <button
+        (click)="resetForm()"
+        type="button"
+        routerLink="/pmi-control"
+        class="flex items-center px-5 py-2 border-2 mb-3 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
+      <h1 class="text-2xl font-bold" style="margin-left: -100px">
+        Insert PMI Data
+      </h1>
+      <div></div>
+    </div>
+
+    <!-- Form -->
+    <form
+      [formGroup]="AddPmiControlForm"
+      novalidate
+      (ngSubmit)="onSubmit()"
+      *ngIf="detailPmiControl?.pmiData[0]?.pmiPartDetails.length == 0"
+    >
+      <input type="hidden" formControlName="pmiId" />
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Row 1 -->
+        <div class="form-group">
+          <label for="">Aircraft Type</label>
+          <input
+            value="{{ detailPmiControl?.aircraftType.acType }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Engine/APU Type</label>
+          <input
+            value="{{ detailPmiControl?.type.typeName }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+
+        <!-- Row 2 -->
+        <div class="form-group">
+          <label for="">Part Number</label>
+          <input
+            value="{{ detailPmiControl?.partNumber }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Serial Number</label>
+          <input
+            value="{{ detailPmiControl?.serialNumber }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-group">
+          <label for="">Manufacture</label>
+          <input
+            value="{{ detailPmiControl?.manufacture.manufactureName }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Inventory Number</label>
+          <input
+            value="{{ detailPmiControl?.inventoryNumber }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+
+        <!-- Row 4 -->
+        <div class="form-group">
+          <label for="">PMI Date</label>
+          <input
+            value="{{
+              detailPmiControl?.pmiData[0].pmiDate
+                | dfnsParseIso
+                | dfnsFormat : 'dd-LLL-yyyy'
+            }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Due Date</label>
+          <input
+            value="{{
+              detailPmiControl?.pmiData[0].nextPmiDueDate
+                | dfnsParseIso
+                | dfnsFormat : 'dd-LLL-yyyy'
+            }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+
+        <!-- Row 5 -->
+        <div class="form-group">
+          <label for="">New PMI Date</label>
+          <input
+            type="date"
+            formControlName="pmi_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">New Due Date</label>
+          <input
+            type="date"
+            formControlName="next_pmi_due_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 6 -->
+        <div class="form-group">
+          <label for="">Maintenance Activity</label>
+          <input
+            type="text"
+            formControlName="pmi_activity"
+            value="{{ detailPmiControl?.pmiData[0]?.pmiActivity }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            placeholder="Please fill this..."
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Result Link</label>
+          <input
+            type="text"
+            formControlName="pmi_result"
+            value="{{ detailPmiControl?.pmiData[0]?.pmiResult }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            placeholder="Please fill this with external link.."
+          />
+        </div>
+      </div>
+
+      <!-- Insert to pmi part detail -->
+      <div class="mt-4">
+        <h1 class="text-lg font-bold mb-4">Description</h1>
+        <table class="w-full border">
+          <thead>
+            <tr
+              class="py-4 px-6 font-bold uppercase text-sm text-center border border-gray-400"
+              style="background-color: #bad5f9"
+            >
+              <!-- Column headers -->
+              <th scope="col" class="px-6 py-4 border-r">No.</th>
+              <th scope="col" class="px-6 py-4 border-r">Description</th>
+              <th scope="col" class="px-6 py-4 border-r">Ideal</th>
+              <th scope="col" class="px-6 py-4 border-r">Actual</th>
+              <!-- Add additional column headers here -->
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows and cells -->
+            <tr class="text-center">
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                1
+              </td>
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                Completeness
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[0]?.idealValue
+                  }}"
+                  type="number"
+                  formControlName="ideal_value1"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="actual_value1"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[0]?.actualValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+            </tr>
+            <tr class="text-center">
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                2
+              </td>
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                Wheel
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="ideal_value2"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[1]?.idealValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="actual_value2"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[1]?.actualValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+            </tr>
+            <tr class="text-center">
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                3
+              </td>
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                Brake
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="ideal_value3"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[2]?.idealValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="actual_value3"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[2]?.actualValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+            </tr>
+            <!-- Add additional rows here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex justify-center mt-6">
+        <button
+          type="button"
+          (click)="resetForm()"
+          routerLink="/pmi-control"
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 border-2 mr-5 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+
+    <!-- Form Update -->
+    <form
+      [formGroup]="AddPmiControlForm"
+      novalidate
+      (ngSubmit)="onUpdate()"
+      *ngIf="detailPmiControl?.pmiData[0]?.pmiPartDetails.length !== 0"
+    >
+      <input type="hidden" formControlName="pmiId" />
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Row 1 -->
+        <div class="form-group">
+          <label for="">Aircraft Type</label>
+          <input
+            value="{{ detailPmiControl?.aircraftType.acType }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Engine/APU Type</label>
+          <input
+            value="{{ detailPmiControl?.type.typeName }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+
+        <!-- Row 2 -->
+        <div class="form-group">
+          <label for="">Part Number</label>
+          <input
+            value="{{ detailPmiControl?.partNumber }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Serial Number</label>
+          <input
+            value="{{ detailPmiControl?.serialNumber }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-group">
+          <label for="">Manufacture</label>
+          <input
+            value="{{ detailPmiControl?.manufacture.manufactureName }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Inventory Number</label>
+          <input
+            value="{{ detailPmiControl?.inventoryNumber }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+
+        <!-- Row 4 -->
+        <div class="form-group">
+          <label for="">PMI Date</label>
+          <input
+            value="{{
+              detailPmiControl?.pmiData[0].pmiDate
+                | dfnsParseIso
+                | dfnsFormat : 'dd-LLL-yyyy'
+            }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Due Date</label>
+          <input
+            value="{{
+              detailPmiControl?.pmiData[0].nextPmiDueDate
+                | dfnsParseIso
+                | dfnsFormat : 'dd-LLL-yyyy'
+            }}"
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            disabled
+          />
+        </div>
+
+        <!-- Row 5 -->
+        <div class="form-group">
+          <label for="">New PMI Date</label>
+          <input
+            type="date"
+            formControlName="pmi_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">New Due Date</label>
+          <input
+            type="date"
+            formControlName="next_pmi_due_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 6 -->
+        <div class="form-group">
+          <label for="">Maintenance Activity</label>
+          <input
+            type="text"
+            formControlName="pmi_activity"
+            value="{{ detailPmiControl?.pmiData[0]?.pmiActivity }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            placeholder="Please fill this..."
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Result Link</label>
+          <input
+            type="text"
+            formControlName="pmi_result"
+            value="{{ detailPmiControl?.pmiData[0]?.pmiResult }}"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            placeholder="Please fill this with external link.."
+          />
+        </div>
+      </div>
+
+      <!-- Insert to pmi part detail -->
+      <div class="mt-4">
+        <h1 class="text-lg font-bold mb-4">Description</h1>
+        <table class="w-full border">
+          <thead>
+            <tr
+              class="py-4 px-6 font-bold uppercase text-sm text-center border border-gray-400"
+              style="background-color: #bad5f9"
+            >
+              <!-- Column headers -->
+              <th scope="col" class="px-6 py-4 border-r">No.</th>
+              <th scope="col" class="px-6 py-4 border-r">Description</th>
+              <th scope="col" class="px-6 py-4 border-r">Ideal</th>
+              <th scope="col" class="px-6 py-4 border-r">Actual</th>
+              <!-- Add additional column headers here -->
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows and cells -->
+            <tr class="text-center">
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                1
+              </td>
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                Completeness
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[0]?.idealValue
+                  }}"
+                  type="number"
+                  formControlName="ideal_value1"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="actual_value1"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[0]?.actualValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+            </tr>
+            <tr class="text-center">
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                2
+              </td>
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                Wheel
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="ideal_value2"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[1]?.idealValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="actual_value2"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[1]?.actualValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+            </tr>
+            <tr class="text-center">
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                3
+              </td>
+              <td
+                class="py-4 px-6 border border-gray-300"
+                style="background-color: #e4e4e4"
+              >
+                Brake
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="ideal_value3"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[2]?.idealValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+              <td class="py-4 px-6 border border-gray-300">
+                <input
+                  formControlName="actual_value3"
+                  value="{{
+                    detailPmiControl?.pmiData[0]?.pmiPartDetails[2]?.actualValue
+                  }}"
+                  type="number"
+                  class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                />
+              </td>
+            </tr>
+            <!-- Add additional rows here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex justify-center mt-6">
+        <button
+          type="button"
+          (click)="resetForm()"
+          routerLink="/pmi-control"
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 border-2 mr-5 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

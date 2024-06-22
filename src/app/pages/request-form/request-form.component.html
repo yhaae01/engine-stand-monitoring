@@ -1,0 +1,438 @@
+<div class="container px-6 pt-28 pb-6 mx-auto max-w-full">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between mb-3">
+      <button
+        type="button"
+        routerLink="/home"
+        class="flex items-center px-5 py-2 border-2 mb-3 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
+      <h1 class="text-2xl font-bold" style="margin-left: -100px">
+        Availability Check
+      </h1>
+      <div></div>
+    </div>
+
+    <!-- <div class="flex mb-4">
+      <input
+        type="text"
+        class="border py-2 px-4 w-full md:w-1/4 rounded-lg"
+        placeholder="Search..."
+      />
+      <button
+        class="bg-blue-800 hover:bg-blue-900 text-white rounded-lg py-2 px-4 ml-2"
+      >
+        Search
+      </button>
+    </div> -->
+    <div class="overflow-x-auto">
+      <table class="table-fixed border-collapse">
+        <thead class="border-b bg-blue-200">
+          <!-- Column headers -->
+          <tr>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              No.
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['m_aircraft_type'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_aircraft_type.ac_type')"
+              >
+                Aircraft Type
+                <hero-icon
+                  *ngIf="orderRequest['m_aircraft_type']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['m_type'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_type.type')"
+              >
+                Engine/APU Type
+                <hero-icon
+                  *ngIf="orderRequest['m_type']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['m_manufacture'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_manufacture.manufacture')"
+              >
+                Manufacture
+                <hero-icon
+                  *ngIf="orderRequest['m_manufacture']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['part_number'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('part_number')"
+              >
+                Part Number
+                <hero-icon
+                  *ngIf="orderRequest['part_number']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['serial_number'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('serial_number')"
+              >
+                Serial Number
+                <hero-icon
+                  *ngIf="orderRequest['serial_number']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Overall
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Work Order Reff
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Remark
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['is_available'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('is_available')"
+              >
+                Available
+                <hero-icon
+                  *ngIf="orderRequest['is_available']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Engine/APU Serial Number
+            </th>
+
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Action
+            </th>
+            <!-- Add additional column headers here -->
+          </tr>
+          <!-- Search -->
+          <tr>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_aircraft_type.ac_type', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_type.type', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_manufacture.manufacture', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('part_number', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('serial_number', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <select
+                (change)="filterStatus($event)"
+                class="form-select form-select-sm rounded-md block w-28 px-2 py-1.5 text-sm font-normal text-gray-700 bg-gray-100 bg-clip-padding bg-no-repeat border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-600 focus:outline-none"
+                aria-label=".form-select-sm example"
+              >
+                <option hidden [selected]="onStatus == 9">Select</option>
+                <option *ngIf="onStatus != 9" value="9">Reset</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows and cells -->
+          <tr
+            class="text-center"
+            *ngFor="let requests of requestData; let i = index"
+          >
+            <td class="py-4 px-6 border border-gray-300">
+              {{ dataRequest.offset + 1 + i }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ requests.aircraftType.acType }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ requests.type.typeName }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ requests.manufacture.manufactureName }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ requests.partNumber }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ requests.serialNumber }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <div class="w-20 h-4 bg-gray-200 rounded-full dark:bg-gray-700">
+                <div
+                  class="text-xs h-full font-medium text-blue-100 p-0.5 leading-none rounded-full w-full"
+                  *ngIf="!requests.overall"
+                >
+                  0%
+                </div>
+                <div
+                  *ngIf="requests.overall"
+                  class="bg-blue-600 text-xs h-full font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+                  [style.width.%]="
+                    requests.overall < 100 ? requests.overall : 100
+                  "
+                >
+                  {{ requests.overall < 100 ? requests.overall : 100 }}%
+                </div>
+              </div>
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ requests?.request[0]?.workOrderReff || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ requests?.request[0]?.remark || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <span
+                *ngIf="requests.isAvailable == 1"
+                class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-500 text-white rounded"
+                >Yes</span
+              >
+              <span
+                *ngIf="requests.isAvailable == 0"
+                class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-500 text-white rounded"
+                >No</span
+              >
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ requests?.request[0]?.serialNumberEngine || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <span
+                *ngIf="requests.isAvailable == 1"
+                (click)="addRequest(requests.equipmentId)"
+                class="text-blue-600 hover:text-blue-700 cursor-pointer transition duration-300 ease-in-out mb-4"
+                >Select
+              </span>
+              <span
+                *ngIf="requests.isAvailable == 0"
+                class="text-blue-600 cursor-not-allowed hover:text-blue-700 transition duration-300 ease-in-out mb-4"
+                >Select
+              </span>
+            </td>
+            <!-- Add additional cells here -->
+          </tr>
+          <!-- Add additional rows here -->
+
+          <!-- Jika datanya kosong -->
+          <tr *ngIf="requestData?.length == 0">
+            <td
+              colspan="10"
+              class="py-5 items-center text-center text-gray-500 font-bold"
+            >
+              Oops! There is noting here
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Table Pagination -->
+    <div
+      *ngIf="requestData?.length > 0"
+      class="flex items-center justify-between mt-5"
+    >
+      <div class="flex items-center justify-start">
+        <span class="text-sm">Show</span>
+        <select
+          [(ngModel)]="paginator.pageSize"
+          (ngModelChange)="changePageSize()"
+          class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full py-1.5 pl-2 pr-7 mx-2 hover:cursor-pointer"
+        >
+          <option *ngFor="let size of paginator.pageOption" [ngValue]="size">
+            {{ size }}
+          </option>
+        </select>
+        <span class="text-sm">data</span>
+      </div>
+      <div class="inline-flex items-center text-center text-sm">
+        Page {{ paginator.pageNumber }} of {{ paginator.totalPage }}
+      </div>
+      <div class="flex items-center text-sm">
+        <button
+          type="button"
+          (click)="changePageNumber(false)"
+          [disabled]="paginator.pageNumber == 1"
+          [class]="paginator.pageNumber == 1 ? 'bg-gray-200' : 'bg-gray-50'"
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg active:bg-gray-200 active:border-blue-300"
+        >
+          <hero-icon
+            [name]="'chevron-left'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-3 w-3 mr-1"
+          ></hero-icon>
+          Previous
+        </button>
+        <button
+          type="button"
+          (click)="changePageNumber(true)"
+          [disabled]="paginator.pageNumber == paginator.totalPage"
+          [class]="
+            paginator.pageNumber == paginator.totalPage
+              ? 'bg-gray-200'
+              : 'bg-gray-50'
+          "
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg active:bg-gray-200 active:border-blue-300 ml-2"
+        >
+          Next
+          <hero-icon
+            [name]="'chevron-right'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-3 w-3 ml-1"
+          ></hero-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

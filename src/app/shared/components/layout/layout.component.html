@@ -1,0 +1,134 @@
+<div class="flex">
+  <!-- Sidebar -->
+  <app-sidenav
+    [isSidebarOpen]="this.sidebarOpenStatus"
+    class="bg-white"
+  ></app-sidenav>
+
+  <div class="bg-dbx-blue-50 flex flex-col overflow-hidden w-full">
+    <!-- Navbar -->
+    <app-navbar (sidebarStatus)="eventSidebar($event)"></app-navbar>
+
+    <!-- Main content -->
+    <router-outlet> </router-outlet>
+  </div>
+
+  <!-- Feedback Button -->
+  <button
+    type="button"
+    data-bs-toggle="modal"
+    data-bs-target="#feedback"
+    data-te-toggle="tooltip"
+    title="Send Feedback"
+    class="fixed p-2.5 rounded-full right-4 bottom-10 bg-dbx-blue-500 text-white shadow-slate-400 shadow-lg duration-300 hover:opacity-80"
+  >
+    <fa-icon
+      icon="comment-dots"
+      size="lg"
+      flip="horizontal"
+      [fixedWidth]="true"
+    ></fa-icon>
+  </button>
+
+  <!-- Feedback Modal -->
+  <div
+    class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="feedback"
+    tabindex="-1"
+    aria-labelledby="feedbackTitle"
+    aria-modal="true"
+    role="dialog"
+    data-bs-backdrop="static"
+  >
+    <div
+      class="modal-dialog modal-dialog-centered relative w-auto pointer-events-none"
+    >
+      <div
+        class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-lg outline-none text-current modal-lg"
+      >
+        <div class="modal-header items-center p-5 border-gray-200 rounded-t-lg">
+          <h5
+            class="text-xl text-center font-medium leading-normal text-gray-900"
+          >
+            Give Us Feedback
+          </h5>
+        </div>
+        <form
+          [formGroup]="feedbackForm"
+          (ngSubmit)="submitFeedback()"
+          novalidate
+        >
+          <div class="modal-body relative p-5">
+            <div class="mb-5 w-full text-center">
+              <label class="form-label inline-block text-gray-800 font-bold"
+                >Rate your experience</label
+              >
+              <star-rating
+                [value]="5"
+                [totalstars]="5"
+                checkedcolor="#FFC058"
+                uncheckedcolor="#B8B8B8"
+                size="48px"
+                (rate)="onRatingChange($event.newValue)"
+              ></star-rating>
+            </div>
+            <div class="mb-5 w-full text-center">
+              <label
+                class="form-label inline-block mb-2 text-gray-800 font-bold"
+                >Write your review about Engine Stand features</label
+              >
+              <textarea
+                formControlName="review"
+                class="peer block text-sm w-full rounded border-1 bg-transparent py-[1.5] px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear border-dbx-blue-500 placeholder:text-sm placeholder:opacity-75"
+                rows="4"
+                placeholder="This form is for providing feedback about how our features can be improved or reporting bug"
+              ></textarea>
+            </div>
+            <div class="mb-5 w-full text-center">
+              <label
+                class="form-label inline-block mb-2 text-gray-800 font-bold after:content-['(optional)'] after:text-sm after:font-normal after:opacity-80"
+              >
+                Scope of features
+              </label>
+              <div class="text-sm">
+                <ng-select
+                  [items]="[]"
+                  [addTag]="true"
+                  [multiple]="true"
+                  [selectOnTab]="true"
+                  [isOpen]="false"
+                  placeholder="Each scope separated by enter"
+                  formControlName="scope"
+                >
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div
+            class="modal-footer flex items-center justify-center px-5 pb-7 pt-3 border-gray-200 rounded-b-lg"
+          >
+            <button
+              (click)="resetFeedbackForm()"
+              #closeFeedbackModal
+              type="button"
+              class="flex-initial inline-block px-10 py-2 mx-3 bg-white text-dbx-blue-600 border border-dbx-blue-500 font-medium leading-tight rounded-lg hover:bg-gray-100 transition duration-150 ease-in-out"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="feedbackForm.pristine || feedbackForm.invalid"
+              [class.cursor-not-allowed]="
+                feedbackForm.pristine || feedbackForm.invalid
+              "
+              class="flex-initial inline-block px-10 py-2 mx-3 bg-dbx-blue-500 text-white border border-dbx-blue-500 font-medium leading-tight rounded-lg hover:bg-dbx-blue-600 transition duration-150 ease-in-out"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

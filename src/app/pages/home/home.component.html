@@ -1,0 +1,524 @@
+<div class="container px-6 pt-28 pb-6 max-w-full">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-end mb-4">
+      <!-- <div class="flex items-center">
+        <input
+          type="text"
+          class="border py-2 px-4 w-full rounded-lg"
+          placeholder="Search..."
+        />
+        <button
+          class="bg-blue-700 hover:bg-blue-800 text-white rounded-lg py-2 px-4 ml-2"
+        >
+          Search
+        </button>
+      </div> -->
+      <div>
+        <button
+          routerLink="/request-form"
+          class="flex items-center bg-lime-500 hover:bg-lime-600 text-white rounded-lg py-2 px-4 ml-2"
+        >
+          <svg
+            class="w-6 h-6 mr-1"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+            ></path>
+          </svg>
+          Request
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table-fixed border-collapse">
+        <thead class="border-b bg-blue-200">
+          <tr>
+            <!-- Column headers -->
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              No.
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['id_request'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('id_request')"
+              >
+                Order
+                <hero-icon
+                  *ngIf="orderRequest['id_request']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['created_at'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('created_at')"
+              >
+                Entry Date
+                <hero-icon
+                  *ngIf="orderRequest['created_at']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['created_by'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('created_by')"
+              >
+                Entry By
+                <hero-icon
+                  *ngIf="orderRequest['created_by']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['date'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('date')"
+              >
+                Start Date
+                <hero-icon
+                  *ngIf="orderRequest['date']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              End Date
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Days
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['m_destination'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_destination.destination')"
+              >
+                Destination
+                <hero-icon
+                  *ngIf="orderRequest['m_destination']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <!-- <th
+              scope="col"
+              class="px-6 py-4 border-r text-sm font-semibold whitespace-nowrap text-black"
+            >
+              Subject
+            </th> -->
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Status
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['updated_by'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('updated_by')"
+              >
+                Updated By
+                <hero-icon
+                  *ngIf="orderRequest['updated_by']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['remark'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('remark')"
+              >
+                Remark
+                <hero-icon
+                  *ngIf="orderRequest['remark']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Action
+            </th>
+            <!-- Add additional column headers here -->
+          </tr>
+          <tr>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('id_request', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="date"
+                (change)="filterDate('created_at', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('created_by', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="date"
+                (change)="filterDate('date', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_destination.destination', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('updated_by', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <!-- <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th> -->
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('remark', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows and cells -->
+          <tr class="text-center" *ngFor="let homes of homeData; let i = index">
+            <td class="py-4 px-6 border border-gray-300">
+              {{ dataRequest.offset + 1 + i }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes.requestId }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes.createdAt | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes.createdBy }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes.date | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes.requestDate[0].until | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes.days }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes?.destination?.destinationName || "-" }}
+            </td>
+            <!-- <td class="py-4 px-6 border border-gray-300">
+              <span
+                class="text-xs inline-block py-1 px-2.5 leading-none whitespace-nowrap align-baseline font-bold bg-green-500 text-white rounded"
+                >??</span
+              >
+            </td> -->
+            <td class="py-4 px-6 border border-gray-300">
+              <span
+                *ngIf="
+                  homes.requestDelivery[0]?.deliver[0]?.activity.activity ==
+                  'Open'
+                "
+                class="text-xs inline-block py-1 px-2.5 leading-none whitespace-nowrap align-baseline font-bold bg-green-500 text-white rounded"
+              >
+                Open
+              </span>
+              <span
+                *ngIf="
+                  homes.requestDelivery[0]?.deliver[0]?.activity.activity ==
+                  'Close'
+                "
+                class="text-xs inline-block py-1 px-2.5 leading-none whitespace-nowrap align-baseline font-bold bg-red-500 text-white rounded"
+              >
+                Close
+              </span>
+              <span
+                *ngIf="
+                  homes.requestDelivery[0]?.deliver[0]?.activity.activity ==
+                  'Reject'
+                "
+                class="text-xs inline-block py-1 px-2.5 leading-none whitespace-nowrap align-baseline font-bold bg-red-500 text-white rounded"
+              >
+                Reject
+              </span>
+              <span
+                *ngIf="
+                  homes.requestDelivery[0]?.deliver[0]?.activity.activity ==
+                  'Use'
+                "
+                class="text-xs inline-block py-1 px-2.5 leading-none whitespace-nowrap align-baseline font-bold bg-blue-500 text-white rounded"
+              >
+                Used
+              </span>
+              <span
+                *ngIf="
+                  homes.requestDelivery[0]?.deliver[0]?.activity.activity ==
+                  'Take'
+                "
+                class="text-xs inline-block py-1 px-2.5 leading-none whitespace-nowrap align-baseline font-bold bg-yellow-500 text-white rounded"
+              >
+                Take
+              </span>
+              <span
+                *ngIf="
+                  homes.requestDelivery[0]?.deliver[0]?.activity.activity ==
+                  'Execute'
+                "
+                class="text-xs inline-block py-1 px-2.5 leading-none whitespace-nowrap align-baseline font-bold bg-yellow-500 text-white rounded"
+              >
+                Execute
+              </span>
+              <span
+                *ngIf="
+                  homes.requestDelivery[0]?.deliver[0]?.activity.activity ==
+                  'Delivered'
+                "
+                class="text-xs inline-block py-1 px-2.5 leading-none whitespace-nowrap align-baseline font-bold bg-green-500 text-white rounded"
+              >
+                Delivered
+              </span>
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes.updatedBy || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ homes.remark || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <div class="inline-flex rounded-md shadow-sm" role="group">
+                <button
+                  (click)="detailHome(homes.requestId)"
+                  type="button"
+                  class="border-blue-600 mr-2 text-blue-600 font-medium text-md leading-tight outline outline-1 outline-blue-200 rounded hover:bg-gray-500 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                >
+                  <svg
+                    class="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  (click)="editRequest(homes.requestId)"
+                  class="border-yellow-600 text-yellow-600 font-medium text-md leading-tight outline outline-1 outline-blue-200 rounded hover:bg-gray-500 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                >
+                  <svg
+                    class="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
+                    ></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <!-- Add additional cells here -->
+          </tr>
+          <!-- Add additional rows here -->
+
+          <!-- Jika datanya kosong -->
+          <tr *ngIf="homeData?.length == 0">
+            <td
+              colspan="13"
+              class="py-5 items-center text-center text-gray-500 font-bold"
+            >
+              No data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Table Pagination -->
+    <div
+      *ngIf="homeData?.length > 0"
+      class="flex items-center justify-between mt-5"
+    >
+      <div class="flex items-center justify-start">
+        <span class="text-sm">Show</span>
+        <select
+          [(ngModel)]="paginator.pageSize"
+          (ngModelChange)="changePageSize()"
+          class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full py-1.5 pl-2 pr-7 mx-2 hover:cursor-pointer"
+        >
+          <option *ngFor="let size of paginator.pageOption" [ngValue]="size">
+            {{ size }}
+          </option>
+        </select>
+        <span class="text-sm">data</span>
+      </div>
+      <div class="inline-flex items-center text-center text-sm">
+        Page {{ paginator.pageNumber }} of {{ paginator.totalPage }}
+      </div>
+      <div class="flex items-center text-sm">
+        <button
+          type="button"
+          (click)="changePageNumber(false)"
+          [disabled]="paginator.pageNumber == 1"
+          [class]="paginator.pageNumber == 1 ? 'bg-gray-200' : 'bg-gray-50'"
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg active:bg-gray-200 active:border-blue-300"
+        >
+          <hero-icon
+            [name]="'chevron-left'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-3 w-3 mr-1"
+          ></hero-icon>
+          Previous
+        </button>
+        <button
+          type="button"
+          (click)="changePageNumber(true)"
+          [disabled]="paginator.pageNumber == paginator.totalPage"
+          [class]="
+            paginator.pageNumber == paginator.totalPage
+              ? 'bg-gray-200'
+              : 'bg-gray-50'
+          "
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg active:bg-gray-200 active:border-blue-300 ml-2"
+        >
+          Next
+          <hero-icon
+            [name]="'chevron-right'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-3 w-3 ml-1"
+          ></hero-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

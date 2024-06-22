@@ -1,0 +1,454 @@
+<div class="container px-6 pt-28 pb-6 mx-auto">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between">
+      <button
+        (click)="resetForm()"
+        type="button"
+        routerLink="/inventory"
+        class="flex items-center px-5 py-2 border-2 mb-3 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
+      <h1 class="text-2xl font-bold" style="margin-left: -100px">Edit Data</h1>
+      <div></div>
+    </div>
+
+    <form [formGroup]="EditInventoryForm" (ngSubmit)="onSubmit()" novalidate>
+      <input type="hidden" formControlName="idPmiData" />
+      <input type="hidden" formControlName="idPmiSheet" />
+      <input type="hidden" formControlName="is_available" />
+      <input type="hidden" formControlName="status" />
+      <div class="flex justify-center">
+        <div class="my-5 w-96">
+          <div class="...">
+            <div class="flex flex-wrap justify-center">
+              <img
+                (error)="defaultPhoto($event)"
+                [src]="imageData"
+                class="p-1 bg-white border rounded max-w-xs"
+                alt="No Image"
+              />
+              <input
+                class="form-control px-2 py-1.5 mt-2 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                id="image_path"
+                name="image_path"
+                accept=".png, .jpg, .jpeg"
+                type="file"
+                (change)="onDocumentUploaded($event)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Row 1 -->
+        <div class="form-group">
+          <label for="">Description </label>
+          <select
+            id="description"
+            name="description"
+            formControlName="description"
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          >
+            <option
+              [ngValue]="'engine'"
+              [selected]="detailInventory?.description == 'engine'"
+            >
+              Engine
+            </option>
+            <option
+              [ngValue]="'apu'"
+              [selected]="detailInventory?.description == 'apu'"
+            >
+              APU
+            </option>
+          </select>
+          <div
+            *ngIf="
+              !description?.valid &&
+              (description?.dirty || description?.touched)
+            "
+          >
+            <small class="text-red-800" [hidden]="!description.errors.required">
+              Description is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for=""
+            >Engine/APU Type <span class="text-red-500">*</span></label
+          >
+          <ng-select
+            id="type_id"
+            name="type_id"
+            formControlName="type_id"
+            [items]="typeData"
+            bindLabel="typeName"
+            bindValue="typeId"
+          >
+          </ng-select>
+          <div *ngIf="!type_id?.valid && (type_id?.dirty || type_id?.touched)">
+            <small class="text-red-800" [hidden]="!type_id.errors.required">
+              Engine/APU Type is required
+            </small>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="form-group">
+          <label for=""
+            >Aircraft Type <span class="text-red-500">*</span></label
+          >
+          <ng-select
+            id="aircraft_type_id"
+            name="aircraft_type_id"
+            formControlName="aircraft_type_id"
+            [items]="aircraftData"
+            bindLabel="acType"
+            bindValue="aircraftTypeId"
+          >
+          </ng-select>
+          <div
+            *ngIf="
+              !aircraft_type_id?.valid &&
+              (aircraft_type_id?.dirty || aircraft_type_id?.touched)
+            "
+          >
+            <small
+              class="text-red-800"
+              [hidden]="!aircraft_type_id.errors.required"
+            >
+              Aircraft Type is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">Part Number <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            id="part_number"
+            value="{{ detailInventory?.partNumber }}"
+            (keyup)="uniqueValidation('part_number', $event)"
+            (change)="uniqueValidation('part_number', $event)"
+            name="part_number"
+            formControlName="part_number"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+          <div
+            *ngIf="
+              EditInventoryForm.controls['part_number'].invalid &&
+              (EditInventoryForm.controls['part_number'].dirty ||
+                EditInventoryForm.controls['part_number'].touched)
+            "
+          >
+            <small
+              *ngIf="EditInventoryForm.controls['part_number'].invalid"
+              class="text-red-800"
+            >
+              Part Number is required
+            </small>
+          </div>
+          <!-- <div
+            *ngIf="
+              (invalidPartNumber ||
+                EditInventoryForm.controls['part_number'].invalid) &&
+              (EditInventoryForm.controls['part_number'].dirty ||
+                EditInventoryForm.controls['part_number'].touched)
+            "
+          >
+            <small
+              *ngIf="EditInventoryForm.controls['part_number'].invalid"
+              class="text-red-800"
+            >
+              Part Number is required
+            </small>
+            <small *ngIf="invalidPartNumber" class="text-red-800">
+              Part Number is already registered
+            </small>
+          </div> -->
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-group">
+          <label for=""
+            >Serial Number <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            value="{{ detailInventory?.serialNumber }}"
+            id="serial_number"
+            name="serial_number"
+            formControlName="serial_number"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+          <div
+            *ngIf="
+              !serial_number?.valid &&
+              (serial_number?.dirty || serial_number?.touched)
+            "
+          >
+            <small
+              class="text-red-800"
+              [hidden]="!serial_number.errors.required"
+            >
+              Serial Number is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">Model</label>
+          <input
+            type="text"
+            value="{{ detailInventory?.model }}"
+            id="model"
+            name="model"
+            formControlName="model"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 4 -->
+        <div class="form-group">
+          <label for="">Owner <span class="text-red-500">*</span></label>
+          <select
+            id="owner_id"
+            name="owner_id"
+            formControlName="owner_id"
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          >
+            <option selected value="">Select Owner</option>
+            <option
+              *ngFor="let owners of ownerData"
+              [ngValue]="owners.ownerId"
+              [selected]="detailInventory?.owner.ownerId == owners.ownerId"
+            >
+              {{ owners.ownerName }}
+            </option>
+          </select>
+          <div
+            *ngIf="!owner_id?.valid && (owner_id?.dirty || owner_id?.touched)"
+          >
+            <small class="text-red-800" [hidden]="!owner_id.errors.required">
+              Owner is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">Storage Location</label>
+          <input
+            type="text"
+            id="storage_location"
+            name="storage_location"
+            value="{{ detailInventory?.storageLocation }}"
+            formControlName="storage_location"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 5 -->
+        <div class="form-group">
+          <label for="">Limitation of Date</label>
+          <select
+            id="limitation"
+            name="limitation"
+            (change)="onChange($event)"
+            formControlName="limitation"
+            class="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          >
+            <option selected value="">Select One</option>
+            <option
+              value="Yes"
+              [selected]="detailInventory?.limitation == 'Yes'"
+            >
+              Yes
+            </option>
+            <option value="No" [selected]="detailInventory?.limitation == 'No'">
+              No
+            </option>
+          </select>
+          <div
+            *ngIf="
+              !limitation?.valid && (limitation?.dirty || limitation?.touched)
+            "
+          >
+            <small class="text-red-800" [hidden]="!limitation.errors.required">
+              Limitation is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">Contract Date</label>
+          <input
+            type="date"
+            id="contract_date"
+            name="contract_date"
+            formControlName="contract_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 6 -->
+        <div class="form-group">
+          <label for="">Initial PMI Date</label>
+          <input
+            type="date"
+            id="pmi_date"
+            name="pmi_date"
+            value="{{ detailInventory?.pmiData[0].pmiDate }}"
+            formControlName="pmi_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Next PMI</label>
+          <input
+            type="date"
+            id="next_pmi_due_date"
+            name="next_pmi_due_date"
+            value="{{ detailInventory?.pmiData[0].nextPmiDueDate }}"
+            formControlName="next_pmi_due_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 7 -->
+        <div class="form-group">
+          <label for="">Manufacture <span class="text-red-500">*</span></label>
+          <ng-select
+            id="manufacture_id"
+            name="manufacture_id"
+            formControlName="manufacture_id"
+            [items]="manufactureData"
+            bindLabel="manufactureName"
+            bindValue="manufactureId"
+          >
+          </ng-select>
+          <div
+            *ngIf="
+              !manufacture_id?.valid &&
+              (manufacture_id?.dirty || manufacture_id?.touched)
+            "
+          >
+            <small
+              class="text-red-800"
+              [hidden]="!manufacture_id.errors.required"
+            >
+              Manufacture is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">Date Manufacture</label>
+          <input
+            type="date"
+            id="manufacture_date"
+            value="{{ detailInventory?.manufactureDate }}"
+            name="manufacture_date"
+            formControlName="manufacture_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 8 -->
+        <div class="form-group">
+          <label for="">Inventory Number</label>
+          <input
+            type="text"
+            id="inventory_number"
+            value="{{ detailInventory?.inventoryNumber }}"
+            name="inventory_number"
+            formControlName="inventory_number"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Inventory Date</label>
+          <input
+            type="date"
+            id="inventory_date"
+            name="inventory_date"
+            value="{{ detailInventory?.inventoryDate }}"
+            formControlName="inventory_date"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+
+        <!-- Row 9 -->
+        <div class="form-group">
+          <label for="">Additional Accessory</label>
+          <input
+            type="text"
+            value="{{ detailInventory?.accessory }}"
+            id="accessory"
+            name="accessory"
+            formControlName="accessory"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+        <div class="form-group">
+          <label for="">Remark</label>
+          <input
+            type="text"
+            value="{{ detailInventory?.remark }}"
+            id="remark"
+            name="remark"
+            formControlName="remark"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <div class="flex justify-center mt-6">
+        <button
+          type="button"
+          (click)="resetForm()"
+          routerLink="/inventory"
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 border-2 mr-5 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+        >
+          Back
+        </button>
+        <button
+          type="submit"
+          [disabled]="EditInventoryForm.pristine || EditInventoryForm.invalid"
+          [class.cursor-not-allowed]="
+            EditInventoryForm.pristine || EditInventoryForm.invalid
+          "
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 bg-lime-600 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-lime-700 hover:shadow-lg focus:bg-lime-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-lime-800 active:shadow-lg transition duration-150 ease-in-out"
+        >
+          Save
+        </button>
+        <!-- <button
+          type="submit"
+          [disabled]="
+            EditInventoryForm.pristine ||
+            EditInventoryForm.invalid ||
+            invalidPartNumber
+          "
+          [class.cursor-not-allowed]="
+            EditInventoryForm.pristine ||
+            EditInventoryForm.invalid ||
+            invalidPartNumber
+          "
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 bg-lime-600 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-lime-700 hover:shadow-lg focus:bg-lime-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-lime-800 active:shadow-lg transition duration-150 ease-in-out"
+        >
+          Save
+        </button> -->
+      </div>
+    </form>
+  </div>
+</div>

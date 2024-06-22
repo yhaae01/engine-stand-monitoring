@@ -1,0 +1,903 @@
+<div class="container px-6 pt-28 pb-6 mx-auto max-w-full">
+  <!-- Card 1 -->
+  <div class="hidden p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">Engine/APU Stand</h1>
+    </div>
+
+    <div class="p-6 rounded-lg shadow-lg bg-white max-w-sm hidden">
+      <div class="columns-2">
+        <img src="https://picsum.photos/50" class="rounded-lg" alt="" />
+        <p class="font-bold text-lg text-right">CFM56-7</p>
+      </div>
+      <div class="columns-3 mt-10">
+        <div class="text-center">
+          <h1 class="font-bold text-lg">6</h1>
+          <p class="font-xs text-gray-300">Total</p>
+        </div>
+        <div class="text-center">
+          <h1 class="font-bold text-lg">6</h1>
+          <p class="font-xs text-gray-300">Used</p>
+        </div>
+        <div class="text-center">
+          <h1 class="font-bold text-lg">6</h1>
+          <p class="font-xs text-gray-300">Available</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between mb-4">
+      <!-- <div class="flex items-center"> -->
+      <!-- <input
+          type="text"
+          class="border py-2 px-4 w-full rounded-lg"
+          placeholder="Search..."
+        />
+        <button
+          class="bg-blue-700 hover:bg-blue-800 text-white rounded-lg py-2 px-4 ml-2"
+        >
+          Search
+        </button> -->
+
+      <div class="form-check form-switch mt-2">
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            (change)="filterIncoming($event)"
+            type="checkbox"
+            class="sr-only peer"
+          />
+          <div
+            class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+          ></div>
+          <span class="ml-3 font-normal text-gray-800">Incoming Only</span>
+        </label>
+      </div>
+      <!-- </div> -->
+      <div>
+        <button
+          type="button"
+          routerLink="/inventory/add-data-inventory"
+          class="flex items-center bg-lime-500 hover:bg-lime-600 text-white rounded-lg py-2 px-4 ml-2"
+        >
+          <svg
+            class="w-6 h-6 mr-1"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          Add Data
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table-fixed border-collapse">
+        <thead class="border-b bg-blue-200">
+          <tr>
+            <!-- Column headers -->
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              No.
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['description'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('description')"
+              >
+                Description
+                <hero-icon
+                  *ngIf="orderRequest['description']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['m_aircraft_type'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_aircraft_type.ac_type')"
+              >
+                Aircraft Type
+                <hero-icon
+                  *ngIf="orderRequest['m_aircraft_type']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['m_type'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_type.type')"
+              >
+                Type
+                <hero-icon
+                  *ngIf="orderRequest['m_type']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['m_manufacture'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_manufacture.manufacture')"
+              >
+                Manufacture
+                <hero-icon
+                  *ngIf="orderRequest['m_manufacture']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['part_number'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('part_number')"
+              >
+                Part Number
+                <hero-icon
+                  *ngIf="orderRequest['part_number']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['serial_number'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('serial_number')"
+              >
+                Serial Number
+                <hero-icon
+                  *ngIf="orderRequest['serial_number']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['inventory_number']
+                  ? 'text-black'
+                  : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('inventory_number')"
+              >
+                Inventory Number
+                <hero-icon
+                  *ngIf="orderRequest['inventory_number']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['inventory_date'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('inventory_date')"
+              >
+                Inventory Date
+                <hero-icon
+                  *ngIf="orderRequest['inventory_date']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['model'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('model')"
+              >
+                Model
+                <hero-icon
+                  *ngIf="orderRequest['model']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['m_owner'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('m_owner.owner_name')"
+              >
+                Owner
+                <hero-icon
+                  *ngIf="orderRequest['m_owner']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['storage_location']
+                  ? 'text-black'
+                  : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('storage_location')"
+              >
+                Storage Location
+                <hero-icon
+                  *ngIf="orderRequest['storage_location']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['destination'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('destination')"
+              >
+                Destination
+                <hero-icon
+                  *ngIf="orderRequest['destination']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['reason'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('reason')"
+              >
+                Reason
+                <hero-icon
+                  *ngIf="orderRequest['reason']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['manufacture_date']
+                  ? 'text-black'
+                  : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('manufacture_date')"
+              >
+                Manufacture Date
+                <hero-icon
+                  *ngIf="orderRequest['manufacture_date']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Initital PMI Date
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Next PMI
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['limitation'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('limitation')"
+              >
+                limitation
+                <hero-icon
+                  *ngIf="orderRequest['limitation']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['contract_date'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('contract_date')"
+              >
+                Contract of Date
+                <hero-icon
+                  *ngIf="orderRequest['contract_date']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['accessory'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('accessory')"
+              >
+                Additional Accessory
+                <hero-icon
+                  *ngIf="orderRequest['accessory']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              [class]="orderRequest['note'] ? 'text-black' : 'text-gray-600'"
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('note')"
+              >
+                Notes
+                <hero-icon
+                  *ngIf="orderRequest['note']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Overall
+            </th>
+            <th
+              scope="col"
+              [class]="
+                orderRequest['activity_status'] ? 'text-black' : 'text-gray-600'
+              "
+              class="text-sm font-semibold whitespace-nowrap px-6 pt-4 border-r"
+            >
+              <div
+                class="flex flex-row justify-center items-center align-middle gap-1 cursor-pointer"
+                (click)="orderByField('activity_status')"
+              >
+                Status
+                <hero-icon
+                  *ngIf="orderRequest['activity_status']"
+                  [name]="orderByAsc ? 'arrow-down' : 'arrow-up'"
+                  type="outline"
+                  class="h-3 w-3"
+                ></hero-icon>
+              </div>
+            </th>
+            <th
+              scope="col"
+              class="text-sm font-semibold whitespace-nowrap text-gray-600 px-6 pt-4 border-r"
+            >
+              Action
+            </th>
+            <!-- Add additional column headers here -->
+          </tr>
+          <!-- Search data -->
+          <tr>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('description', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_aircraft_type.ac_type', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_type.type', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_manufacture.manufacture', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('part_number', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('serial_number', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('inventory_number', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="date"
+                (change)="filterDate('inventory_date', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('model', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('m_owner.owner_name', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('storage_location', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('destination', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('reason', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="date"
+                (change)="filterDate('manufacture_date', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+              />
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th>
+              <select
+                (change)="filterByField('limitation', $event)"
+                class="form-select form-select-sm rounded-md block w-28 px-2 py-1.5 text-sm font-normal text-gray-700 bg-gray-100 bg-clip-padding bg-no-repeat border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-600 focus:outline-none"
+                aria-label=".form-select-sm example"
+              >
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="date"
+                (change)="filterDate('contract_date', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('accessory', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th scope="col" class="text-xs px-3 pb-4 py-4 border-r">
+              <input
+                type="text"
+                (keyup)="filterByField('note', $event)"
+                class="form-control block rounded-md w-full px-3 py-2 text-xs font-normal text-gray-700 bg-gray-100 bg-clip-padding border-0 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-x-blue-500 focus:outline-none"
+                placeholder="Search..."
+              />
+            </th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+            <th
+              scope="col"
+              class="text-xs px-3 pb-4 py-4 border-r border-l"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows and cells -->
+          <tr *ngFor="let inventories of inventoryData; let i = index">
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ dataRequest.offset + 1 + i }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center uppercase">
+              {{ inventories?.description || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories?.aircraftType?.acType }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.type.typeName }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.manufacture.manufactureName }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.partNumber || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.serialNumber || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.inventoryNumber || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.inventoryDate | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.model || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.owner.ownerName }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.storageLocation || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.destination?.destinationName || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.reason || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.manufactureDate | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.pmiData[0].pmiDate | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.pmiData[0].nextPmiDueDate | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.limitation }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.contractDate | date : "dd-MMM-yyyy" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.accessory || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              {{ inventories.notes || "-" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              <div class="w-20 h-4 bg-gray-200 rounded-full dark:bg-gray-700">
+                <div
+                  class="text-xs h-full font-medium text-blue-100 p-0.5 leading-none rounded-full w-full"
+                  *ngIf="!inventories.overall"
+                >
+                  0%
+                </div>
+                <div
+                  *ngIf="inventories.overall"
+                  class="bg-blue-600 text-xs h-full font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+                  [style.width.%]="
+                    inventories.overall < 100 ? inventories.overall : 100
+                  "
+                >
+                  {{ inventories.overall < 100 ? inventories.overall : 100 }}%
+                </div>
+              </div>
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              <span
+                *ngIf="inventories.status == 1"
+                class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900"
+                >Incoming</span
+              >
+              <span
+                *ngIf="inventories.status == 2"
+                class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900"
+                >Outgoing</span
+              >
+            </td>
+            <td class="py-4 px-6 border border-gray-300 text-center">
+              <div class="inline-flex rounded-md shadow-sm" role="group">
+                <button
+                  type="button"
+                  (click)="detailInventory(inventories.equipmentId)"
+                  class="border-blue-700 text-blue-700 font-medium text-md leading-tight outline outline-2 outline-blue-200 rounded hover:bg-blue-500 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                >
+                  <svg
+                    class="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  (click)="editInventory(inventories.equipmentId)"
+                  class="border-yellow-700 text-yellow-700 mx-2 font-medium text-md leading-tight outline outline-2 outline-yellow-200 rounded hover:bg-yellow-500 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  (click)="deleteInventory(inventories)"
+                  class="border-red-700 text-red-700 font-medium text-md leading-tight outline outline-2 outline-red-200 rounded hover:bg-red-500 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <!-- Add additional cells here -->
+          </tr>
+          <!-- Add additional rows here -->
+
+          <!-- Jika datanya kosong -->
+          <tr *ngIf="inventoryData?.length == 0">
+            <td
+              colspan="24"
+              class="py-5 items-center text-center text-gray-500 font-bold"
+            >
+              No data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Table Pagination -->
+    <div
+      *ngIf="inventoryData?.length > 0"
+      class="flex items-center justify-between mt-5"
+    >
+      <div class="flex items-center justify-start">
+        <span class="text-sm">Show</span>
+        <select
+          [(ngModel)]="paginator.pageSize"
+          (ngModelChange)="changePageSize()"
+          class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full py-1.5 pl-2 pr-7 mx-2 hover:cursor-pointer"
+        >
+          <option *ngFor="let size of paginator.pageOption" [ngValue]="size">
+            {{ size }}
+          </option>
+        </select>
+        <span class="text-sm">data</span>
+      </div>
+      <div class="inline-flex items-center text-center text-sm">
+        Page {{ paginator.pageNumber }} of {{ paginator.totalPage }}
+      </div>
+      <div class="flex items-center text-sm">
+        <button
+          type="button"
+          (click)="changePageNumber(false)"
+          [disabled]="paginator.pageNumber == 1"
+          [class]="paginator.pageNumber == 1 ? 'bg-gray-200' : 'bg-gray-50'"
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg active:bg-gray-200 active:border-blue-300"
+        >
+          <hero-icon
+            [name]="'chevron-left'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-3 w-3 mr-1"
+          ></hero-icon>
+          Previous
+        </button>
+        <button
+          type="button"
+          (click)="changePageNumber(true)"
+          [disabled]="paginator.pageNumber == paginator.totalPage"
+          [class]="
+            paginator.pageNumber == paginator.totalPage
+              ? 'bg-gray-200'
+              : 'bg-gray-50'
+          "
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg active:bg-gray-200 active:border-blue-300 ml-2"
+        >
+          Next
+          <hero-icon
+            [name]="'chevron-right'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-3 w-3 ml-1"
+          ></hero-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

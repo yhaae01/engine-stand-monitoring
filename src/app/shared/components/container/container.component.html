@@ -1,0 +1,12 @@
+<div class="content-container w-full" [ngClass]="{dark: (this.isScrolled$ | async)}" (scroll)="this.onScroll($event)">
+  <!-- TODO: Make responsive for filter and paging -->
+
+  <div class="px-4 md:px-8 sm:px-4 my-20">
+    <!-- Title -->
+        <ng-content></ng-content>
+
+    <!-- Title -->
+
+    <!-- Content -->
+  </div>
+</div>

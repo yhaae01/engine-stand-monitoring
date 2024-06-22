@@ -1,0 +1,7 @@
+@tailwind components;
+
+@layer components {
+  .ui-tooltip {
+    @apply fixed text-sm bg-neutral-700 text-white left-16 p-1 px-2 -my-12 ml-1 rounded-sm transition-all duration-300 opacity-0 z-50;
+  }
+}

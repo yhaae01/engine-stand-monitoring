@@ -1,0 +1,364 @@
+<div class="container px-6 pt-28 pb-6 mx-auto">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between">
+      <button
+        type="button"
+        routerLink="/report-hazard"
+        (click)="resetForm()"
+        class="flex items-center px-5 py-2 border-2 mb-3 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
+      <h1 class="text-2xl font-bold" style="margin-left: -100px">
+        Add Report Hazard
+      </h1>
+      <div></div>
+    </div>
+
+    <form [formGroup]="AddHazardForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="flex justify-center">
+        <div class="my-5 w-96">
+          <input
+            class="form-control block w-full px-2 py-1.5 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            id="image_path"
+            name="image_path"
+            accept=".png, .jpg, .jpeg"
+            type="file"
+            (change)="onDocumentUploaded($event)"
+          />
+          <div
+            class="flex justify-center mt-2"
+            *ngIf="
+              !image_path?.valid && (image_path?.dirty || image_path?.touched)
+            "
+          >
+            <small class="text-red-800" [hidden]="!image_path.errors.required">
+              Image is required
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <ul
+        class="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-4"
+        id="tabs-tab"
+        role="tablist"
+      >
+        <!-- List Tabs -->
+        <li class="nav-item" role="presentation">
+          <a
+            href="#general-information"
+            class="nav-link block font-medium text-md leading-tight border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+            id="general-information-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#general-information"
+            role="tab"
+            aria-controls="general-information"
+            aria-selected="true"
+            >General Information</a
+          >
+        </li>
+        <li class="nav-item" role="presentation">
+          <a
+            href="#remedy-hazard"
+            class="nav-link block font-medium text-md leading-tight border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent"
+            id="remedy-hazard-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#remedy-hazard"
+            role="tab"
+            aria-controls="remedy-hazard"
+            aria-selected="false"
+            >Rectification / Remedy Hazard</a
+          >
+        </li>
+      </ul>
+
+      <!-- Content Tabs -->
+      <div class="tab-content" id="tabs-tabContent">
+        <!-- Form General Information -->
+        <div
+          class="tab-pane fade show active"
+          id="general-information"
+          role="tabpanel"
+          aria-labelledby="general-information-tab"
+        >
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Row 1 -->
+            <div class="form-group">
+              <label for=""
+                >Serial Number <span class="text-red-500">*</span></label
+              >
+              <ng-select
+                id="equipment_id"
+                name="equipment_id"
+                formControlName="equipment_id"
+                (change)="equipmentOnChange($event)"
+              >
+                <ng-option value="" selected>Select Serial Number</ng-option>
+                <ng-option
+                  *ngFor="let inventories of inventoryData"
+                  value="{{ inventories.equipmentId }}"
+                >
+                  {{ inventories.serialNumber }}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="
+                  !equipment_id?.valid &&
+                  (equipment_id?.dirty || equipment_id?.touched)
+                "
+              >
+                <small
+                  class="text-red-800"
+                  [hidden]="!equipment_id.errors.required"
+                >
+                  Serial Number is required
+                </small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for=""
+                >Category Hazard <span class="text-red-500">*</span></label
+              >
+              <ng-select
+                id="category"
+                name="category"
+                formControlName="category"
+              >
+                <ng-option value="" selected>Select Category Hazard</ng-option>
+                <ng-option
+                  *ngFor="let categories of categoryData"
+                  value="{{ categories.categoryId }}"
+                >
+                  {{ categories.categoryName }}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="
+                  !category?.valid && (category?.dirty || category?.touched)
+                "
+              >
+                <small
+                  class="text-red-800"
+                  [hidden]="!category.errors.required"
+                >
+                  Category Hazard is required
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="form-group my-3">
+            <label for="">Notes</label>
+            <textarea
+              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              formControlName="notes"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Row 3 -->
+            <div class="form-group">
+              <label for="">Description</label>
+              <input
+                type="text"
+                disabled
+                value="{{ detailInventory?.description }}"
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Engine/APU Type</label>
+              <input
+                type="text"
+                value="{{ detailInventory?.type.typeName }}"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+
+            <!-- Row 4 -->
+            <div class="form-group">
+              <label for="">Aircraft Type</label>
+              <input
+                type="text"
+                value="{{ detailInventory?.aircraftType.acType }}"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Part Number</label>
+              <input
+                value="{{ detailInventory?.partNumber }}"
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+
+            <!-- Row 5 -->
+            <div class="form-group">
+              <label for="">Model</label>
+              <input
+                value="{{ detailInventory?.model }}"
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Manufacture</label>
+              <input
+                value="{{ detailInventory?.manufacture.manufactureName }}"
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+
+            <!-- Row 6 -->
+            <div class="form-group">
+              <label for="">Storage Location</label>
+              <input
+                type="text"
+                value="{{ detailInventory?.storageLocation }}"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Owner</label>
+              <input
+                type="text"
+                value="{{ detailInventory?.owner.ownerName }}"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+
+            <!-- Row 7 -->
+            <div class="form-group">
+              <label for="">Due Date</label>
+              <input
+                value="{{ detailInventory?.pmiData[0].nextPmiDueDate }}"
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Date Manufacture</label>
+              <input
+                value="{{ detailInventory?.manufactureDate }}"
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+
+            <!-- Row 8 -->
+            <div class="form-group">
+              <label for="">Inventory Number</label>
+              <input
+                value="{{ detailInventory?.inventoryNumber }}"
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Status</label>
+              <input
+                *ngIf="detailInventory?.status == 1"
+                value="Incoming"
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+              <input
+                *ngIf="detailInventory?.status == 2"
+                value="Outgoing"
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- Form Rectification / Remedy Hazard -->
+        <div
+          class="tab-pane fade"
+          id="remedy-hazard"
+          role="tabpanel"
+          aria-labelledby="remedy-hazard-tab"
+        >
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Row 1 -->
+            <div class="form-group">
+              <label for="">Category Rectification</label>
+              <input
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Rectification / Remedy Date</label>
+              <input
+                type="text"
+                disabled
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="form-group my-3">
+            <label for="">Response / Reason</label>
+            <textarea
+              disabled
+              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="form-group">
+            <label for="">Attachment Rectification / Remedy Link</label>
+            <input
+              type="text"
+              disabled
+              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center mt-6">
+        <button
+          type="submit"
+          class="mb-2 w-1/4 inline-block px-6 py-2.5 bg-lime-600 text-white font-medium text-md leading-normal rounded shadow-md hover:bg-lime-700 hover:shadow-lg focus:bg-lime-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-lime-800 active:shadow-lg transition duration-150 ease-in-out"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

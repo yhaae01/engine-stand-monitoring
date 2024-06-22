@@ -1,0 +1,71 @@
+<nav
+  [class]="isSidebarOpen ? 'left-60' : 'left-0'"
+  class="fixed top-0 right-0 w-auto flex flex-wrap items-center justify-between py-4 bg-white text-gray-500 hover:text-gray-700 focus:text-gray-700 navbar navbar-expand-lg navbar-light"
+>
+  <div
+    class="container-fluid w-full flex flex-wrap items-center justify-between px-6"
+  >
+    <button
+      (click)="sidebarToggle()"
+      [class.wider]="isSidebarOpen"
+      class="text-dbx-blue-500 sidebar-toggle flex items-center font-bold hover:outline hover:outline-dbx-blue-200 p-2 rounded-lg"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapseSidebar"
+      [attr.aria-expanded]="isSidebarOpen"
+      aria-controls="collapseSidebar"
+    ></button>
+    <div class="flex items-center relative">
+      <div class="dropdown relative">
+        <a
+          class="dropdown-toggle flex items-center text-gray-700 hover:outline hover:outline-dbx-blue-200 rounded-lg p-2"
+          href="#"
+          id="dropdownMenuUser"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <hero-icon
+            [name]="'chevron-down'"
+            hostDisplay="inlineBlock"
+            type="outline"
+            class="nav-btn-icon h-4"
+          ></hero-icon>
+          <div class="mx-3">
+            <div class="text-gray-700 text-end">
+              {{ userData.personalName }}
+            </div>
+            <div class="text-xs text-gray-500 text-end">
+              {{ userData.personalUnit }}
+            </div>
+          </div>
+          <img
+            [src]="this.userPhoto"
+            (error)="defaultPhoto($event)"
+            class="rounded-full h-10 w-10"
+            alt="Profile"
+            loading="lazy"
+          />
+        </a>
+        <ul
+          class="dropdown-menu min-w-max absolute bg-white text-base z-50 float-right p-2 list-none text-left rounded-lg shadow-lg mt-2 hidden bg-clip-padding border-none right-auto left-0"
+          aria-labelledby="dropdownMenuUser"
+        >
+          <li>
+            <a
+              class="dropdown-item text-sm py-2 px-4 font-normal cursor-pointer w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-200 flex items-center rounded-lg"
+              (click)="doLogout()"
+            >
+              <hero-icon
+                [name]="'logout'"
+                hostDisplay="inlineBlock"
+                type="outline"
+                class="nav-btn-icon h-4 mr-2"
+              ></hero-icon
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

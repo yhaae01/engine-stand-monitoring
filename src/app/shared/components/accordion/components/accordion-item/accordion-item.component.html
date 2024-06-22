@@ -1,0 +1,8 @@
+<div [class]="'p-4'" [hidden]="!active" class="pane">
+  <ng-content></ng-content>
+  <ng-container *ngIf="template"
+    [ngTemplateOutlet]="template"
+    [ngTemplateOutletContext]="{ person: dataContext }"
+  >
+  </ng-container>
+</div>

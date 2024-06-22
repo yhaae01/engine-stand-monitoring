@@ -1,0 +1,447 @@
+<div class="container px-6 pt-28 pb-6 mx-auto">
+  <div class="block p-6 rounded-lg shadow-lg bg-white">
+    <div class="flex justify-between mb-3">
+      <button
+        type="button"
+        routerLink="/search-engine-apu-stand"
+        class="flex items-center px-5 py-2 border-2 mb-3 border-blue-600 text-blue-600 font-medium text-md leading-tight rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
+      <h1 class="text-2xl font-bold" style="margin-left: -100px">
+        Detail Search
+      </h1>
+      <div></div>
+    </div>
+
+    <!-- Card biru -->
+    <div
+      class="block p-6 rounded-lg border-dashed border-2 border-sky-200 bg-white mb-5"
+    >
+      <div class="lg:hidden sm:block">
+        <div class="flex flex-wrap justify-center">
+          <img
+            [src]="imageData"
+            (error)="defaultPhoto($event)"
+            class="p-1 bg-white border rounded max-w-xs mx-auto"
+            alt="No Image"
+          />
+        </div>
+      </div>
+      <div class="grid lg:grid-cols-3 lg:gap-4">
+        <div class="hidden sm:block">
+          <div class="flex flex-wrap justify-center">
+            <img
+              [src]="imageData"
+              (error)="defaultPhoto($event)"
+              class="p-1 bg-white border rounded max-w-xs mx-auto"
+              alt="No Image"
+            />
+          </div>
+        </div>
+        <div class="col-span-2">
+          <!-- Tabs -->
+          <ul
+            class="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-4"
+            id="tabs-tab"
+            role="tablist"
+          >
+            <!-- List Tabs -->
+            <li class="nav-item" role="presentation">
+              <a
+                href="#general-information"
+                class="nav-link block font-medium text-md leading-tight border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+                id="general-information-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#general-information"
+                role="tab"
+                aria-controls="general-information"
+                aria-selected="true"
+                >General Information</a
+              >
+            </li>
+            <li class="nav-item" role="presentation">
+              <a
+                href="#remedy-hazard"
+                class="nav-link block font-medium text-md leading-tight border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent"
+                id="remedy-hazard-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#remedy-hazard"
+                role="tab"
+                aria-controls="remedy-hazard"
+                aria-selected="false"
+                >Rectification / Remedy Hazard</a
+              >
+            </li>
+          </ul>
+
+          <!-- Content Tabs -->
+          <div class="tab-content" id="tabs-tabContent">
+            <!-- General Information -->
+            <div
+              class="tab-pane fade show active"
+              id="general-information"
+              role="tabpanel"
+              aria-labelledby="general-information-tab"
+            >
+              <form>
+                <div class="grid lg:grid-cols-3 lg:gap-4">
+                  <!-- Row 1 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Description</label>
+                    <input
+                      value="{{ detailSearch?.description || '-' }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full uppercase text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Inventory Number</label>
+                    <input
+                      value="{{ detailSearch?.inventoryNumber }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Owner</label>
+                    <input
+                      value="{{ detailSearch?.owner.ownerName }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 2 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Storage Location</label>
+                    <input
+                      value="{{ detailSearch?.storageLocation }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Destination</label>
+                    <input
+                      value="{{
+                        detailSearch?.destination?.destinationName || '-'
+                      }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Reason Outgoing</label>
+                    <input
+                      value="{{ detailSearch?.reason || '-' }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 3 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Initial PMI Date</label>
+                    <input
+                      type="text"
+                      value="{{
+                        detailSearch?.pmiData[0].pmiDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Next PMI</label>
+                    <input
+                      type="text"
+                      value="{{
+                        detailSearch?.pmiData[0].nextPmiDueDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Limitation</label>
+                    <input
+                      type="text"
+                      value="{{ detailSearch?.limitation }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 4 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Contract of Date</label>
+                    <input
+                      value="{{
+                        detailSearch?.contractDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Notes</label>
+                    <input
+                      value="{{ detailSearch?.notes || '-' }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- Specification Engine/APU Stand -->
+            <div
+              class="tab-pane fade"
+              id="remedy-hazard"
+              role="tabpanel"
+              aria-labelledby="remedy-hazard-tab"
+            >
+              <form>
+                <div class="grid lg:grid-cols-3 lg:gap-4">
+                  <!-- Row 1 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Model</label>
+                    <input
+                      value="{{ detailSearch?.model || '-' }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Aircraft Type</label>
+                    <input
+                      value="{{ detailSearch?.aircraftType.acType }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Engine/APU Type</label>
+                    <input
+                      value="{{ detailSearch?.type.typeName }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 2 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Manufacture</label>
+                    <input
+                      value="{{ detailSearch?.manufacture.manufactureName }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Part Number</label>
+                    <input
+                      value="{{ detailSearch?.partNumber }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Serial Number</label>
+                    <input
+                      value="{{ detailSearch?.serialNumber }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+
+                  <!-- Row 3 -->
+                  <div class="form-group">
+                    <label class="text-black text-sm">Date Manufacture</label>
+                    <input
+                      value="{{
+                        detailSearch?.manufactureDate
+                          | dfnsParseIso
+                          | dfnsFormat : 'dd-LLL-yyyy'
+                      }}"
+                      type="text"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm">Overall</label>
+                    <input
+                      type="text"
+                      value="{{ detailSearch?.overall || '0' }}%"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="text-black text-sm"
+                      >Additional Accessory</label
+                    >
+                    <input
+                      type="text"
+                      value="{{ detailSearch?.accessory }}"
+                      disabled
+                      class="form-control block w-full text-center px-3 py-1.5 text-base font-normal text-black bg-gray-100 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Button Request Engine Stand & Update delivery Process -->
+          <div class="mt-9 text-center">
+            <button
+              type="button"
+              class="inline-block rounded bg-green-500 hover:bg-green-600 px-6 pb-2 pt-2.5 text-xs font-normal leading-normal text-white mr-1"
+              *ngIf="detailSearch.isAvailable == 1"
+              (click)="addRequest(detailSearch.equipmentId)"
+            >
+              Request Engine Stand
+            </button>
+            <button
+              type="button"
+              class="inline-block rounded bg-green-600 cursor-not-allowed px-6 pb-2 pt-2.5 text-xs font-normal leading-normal text-white mr-1"
+              *ngIf="detailSearch.isAvailable == 0"
+            >
+              Request Engine Stand
+            </button>
+            <button
+              type="button"
+              class="inline-block rounded bg-blue-400 hover:bg-blue-500 px-6 pb-2 pt-2.5 text-xs font-normal leading-normal text-white"
+              *ngIf="detailSearch.requests[0]?.requestId !== null"
+              (click)="detailHome(detailSearch.requests[0]?.requestId)"
+            >
+              Update Delivery Process
+            </button>
+            <button
+              type="button"
+              *ngIf="detailSearch.requests[0]?.requestId === null"
+              class="inline-block rounded bg-blue-500 cursor-not-allowed px-6 pb-2 pt-2.5 text-xs font-normal leading-normal text-white"
+            >
+              Update Delivery Process
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="table-auto border-collapse w-full">
+        <thead>
+          <tr
+            class="py-4 px-6 font-bold uppercase text-sm text-center border border-gray-400"
+            style="background-color: #bad5f9"
+          >
+            <!-- Column headers -->
+            <th scope="col" class="px-6 py-4 border-r">No.</th>
+            <th scope="col" class="px-6 py-4 border-r">Activity</th>
+            <th scope="col" class="px-6 py-4 border-r">Date</th>
+            <th scope="col" class="px-6 py-4 border-r">Due Date</th>
+            <th scope="col" class="px-6 py-4 border-r">ID Number</th>
+            <th scope="col" class="px-6 py-4 border-r">Result</th>
+            <!-- Add additional column headers here -->
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows and cells -->
+          <tr
+            class="text-center"
+            *ngFor="let equipment of detailSearch?.logEquipment!; let i = index"
+          >
+            <td class="py-4 px-6 border border-gray-300">
+              {{ 1 + i }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ equipment.status == 1 ? "Incoming" : "Outgoing" }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{
+                equipment.inventoryData?.pmiData[0].pmiDate
+                  | dfnsParseIso
+                  | dfnsFormat : "dd-LLL-yyyy"
+              }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{
+                equipment.inventoryData?.pmiData[0].nextPmiDueDate
+                  | dfnsParseIso
+                  | dfnsFormat : "dd-LLL-yyyy"
+              }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              {{ equipment.createdBy }}
+            </td>
+            <td class="py-4 px-6 border border-gray-300">
+              <span *ngIf="!equipment.link">-</span>
+
+              <a
+                *ngIf="equipment.link"
+                href="{{ equipment.link }}"
+                target="_blank"
+                class="flex justify-center text-blue-600 hover:text-blue-700 cursor-pointer transition duration-300 ease-in-out mb-4"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </a>
+            </td>
+          </tr>
+          <!-- Add additional rows here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

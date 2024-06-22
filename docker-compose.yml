@@ -1,0 +1,17 @@
+version: "3.6"
+services:
+  front:
+    image: innovation/engine_stand_web:v1.0.0
+    container_name: engine-stand-frontend
+    restart: always
+    networks:
+      - microservice_network
+    ports:
+      - "3005:80"
+    environment:
+      APPLICATION_PORT: 3005
+      NODE_ENV: prod
+networks:
+  microservice_network:
+    external:
+      name: microservice_global_network

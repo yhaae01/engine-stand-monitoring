@@ -1,0 +1,28 @@
+<button (click)="this.toggleChild()" type="button" [ngClass]="this.selectionClass" class="relative form-control block w-full cursor-default rounded-md border border-gray-300 bg-white py-1 pl-1 text-left shadow-sm focus:border-dbx-blue-500 focus:outline-none focus:ring-1 focus:ring-dbx-blue-500 sm:text-sm" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
+  <span class="flex items-center">
+    <span [ngClass]="this.selected === 'Select' || this.selected === null? 'text-dbx-neutral-300' : ''" class="mx-3 block truncate">{{this.selected === 'Select' || this.selected === null ? this.placeholder : this.selectedValue}}</span>
+  </span>
+  <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+    <!-- Heroicon name: mini/chevron-up-down -->
+    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />
+    </svg>
+  </span>
+</button>
+<div class="relative" *ngIf="this.isChildShow" >
+  <ul class="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm" tabindex="-1" role="listbox" aria-labelledby="listbox-label" aria-activedescendant="listbox-option-3">
+    <li (click)="this.onChildSelected({key: null, value: null})" class="text-gray-900 relative cursor-default select-none py-2 pl-3 pr-9 hover:bg-dbx-neutral-200 hover:text-dbx-blue-700" id="listbox-option-0" role="option">
+      <div class="flex items-center">
+        <span class="font-normal ml-3 block truncate text-dbx-neutral-300">{{this.placeholder}}</span>
+      </div>
+    </li>
+    <li (click)="this.onChildSelected(item)" *ngFor="let item of this.selectionList" class="text-gray-900 relative cursor-default select-none py-2 pl-3 pr-9 hover:bg-dbx-neutral-200 hover:text-dbx-blue-700" id="listbox-option-0" role="option">
+      <div class="flex items-center">
+        <span class="font-normal ml-3 block truncate">{{item.value}}</span>
+      </div>
+      <span *ngIf="this.selected === item" class="text-dbx-blue-600 absolute inset-y-0 right-0 flex items-center pr-4">
+        <hero-icon name="check" class="text-dbx-green-500 h-6 w-6"></hero-icon>
+      </span>
+    </li>
+  </ul>
+</div>

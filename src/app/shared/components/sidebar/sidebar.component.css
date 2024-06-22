@@ -1,0 +1,15 @@
+@tailwind components;
+
+@layer components {
+  .nav-menu-btn {
+    @apply hover:bg-slate-300 hover:border-l-8 hover:border-l-dbx-blue-600 p-8 w-8 h-8 flex flex-col justify-center items-center transition-all;
+  }
+
+  .nav-menu-btn-active {
+    @apply border-l-dbx-blue-600 p-8 w-8 h-8 border-l-8 bg-slate-300;
+  }
+
+  .nav-btn-icon {
+    @apply text-dbx-blue-400 w-6 h-6;
+  }
+}
